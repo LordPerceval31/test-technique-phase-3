@@ -36,3 +36,25 @@ export interface LabData {
     technicians: Technician[];
     equipment: Equipment[];
 }
+
+// --- RESULTATS (OUTPUT) ---
+
+export interface ScheduleEntry {
+    sampleId: string;
+    technicianId: string;
+    equipmentId: string;
+    startTime: string; // "HH:MM"
+    endTime: string;   // "HH:MM"
+    priority: string;
+}
+
+export interface LabMetrics {
+    totalTime: number;
+    efficiency: number;
+    conflicts: number;
+}
+
+export interface LabOutput {
+    schedule: ScheduleEntry[];
+    metrics: LabMetrics;
+}
