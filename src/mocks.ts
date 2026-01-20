@@ -1,140 +1,131 @@
-import { LabData } from './types';
+import { LabData } from './types'; // Assure-toi que le fichier d'interfaces s'appelle 'types.ts'
 
-// ---------------------------------------------------------
-// CAS 1 : SIMPLE (1 Sample, 1 Tech, 1 Equipement)
-// Objectif : Valider que le code tourne et calcule les heures.
-// ---------------------------------------------------------
-export const TEST_CASE_1: LabData = {
-    samples: [
-        {
-            id: "S001",
-            type: "BLOOD",
-            priority: "URGENT",
-            analysisTime: 30,
-            arrivalTime: "09:00",
-            patientId: "P001"
-        }
-    ],
-    technicians: [
-        {
-            id: "T001",
-            name: "Alice Martin",
-            speciality: "BLOOD",
-            startTime: "08:00",
-            endTime: "17:00"
-        }
-    ],
-    equipment: [
-        {
-            id: "E001",
-            name: "Analyseur Sang A",
-            type: "BLOOD",
-            available: true
-        }
-    ]
-};
+export const MOCK_DATA: LabData = {
+  samples: [
+    // --- STAT (4) ---
+    {
+      id: "S001", priority: "STAT", type: "BLOOD", analysisType: "Numération complète",
+      analysisTime: 45, arrivalTime: "08:30",
+      patientInfo: { age: 67, service: "Urgences", diagnosis: "Suspicion hémorragie" }
+    },
+    {
+      id: "S008", priority: "STAT", type: "BLOOD", analysisType: "Troponine",
+      analysisTime: 30, arrivalTime: "09:15",
+      patientInfo: { age: 55, service: "Cardiologie", diagnosis: "Infarctus suspecté" }
+    },
+    {
+      id: "S012", priority: "STAT", type: "BLOOD", analysisType: "Hémoculture urgente",
+      analysisTime: 60, arrivalTime: "10:45",
+      patientInfo: { age: 34, service: "Réanimation", diagnosis: "Sepsis sévère" }
+    },
+    {
+      id: "S017", priority: "STAT", type: "BLOOD", analysisType: "Allergènes critiques",
+      analysisTime: 40, arrivalTime: "13:20",
+      patientInfo: { age: 8, service: "Pédiatrie", diagnosis: "Choc anaphylactique" }
+    },
+    // --- URGENT (8) ---
+    {
+      id: "S002", priority: "URGENT", type: "BLOOD", analysisType: "Bilan hépatique",
+      analysisTime: 35, arrivalTime: "08:45",
+      patientInfo: { age: 42, service: "Gastroentérologie", diagnosis: "Hépatite virale" }
+    },
+    {
+      id: "S005", priority: "URGENT", type: "BLOOD", analysisType: "Coagulation",
+      analysisTime: 25, arrivalTime: "09:30",
+      patientInfo: { age: 73, service: "Chirurgie", diagnosis: "Pré-opératoire" }
+    },
+    {
+      id: "S009", priority: "URGENT", type: "URINE", analysisType: "ECBU",
+      analysisTime: 50, arrivalTime: "10:15",
+      patientInfo: { age: 29, service: "Urologie", diagnosis: "Infection urinaire" }
+    },
+    {
+      id: "S011", priority: "URGENT", type: "BLOOD", analysisType: "Caryotype urgent",
+      analysisTime: 90, arrivalTime: "11:00",
+      patientInfo: { age: 32, service: "Génétique médicale", diagnosis: "Syndrome chromosomique" }
+    },
+    {
+      id: "S014", priority: "URGENT", type: "BLOOD", analysisType: "Sérologie HIV",
+      analysisTime: 55, arrivalTime: "11:45",
+      patientInfo: { age: 26, service: "Infectiologie", diagnosis: "Exposition VIH" }
+    },
+    {
+      id: "S016", priority: "URGENT", type: "BLOOD", analysisType: "Frottis sanguin",
+      analysisTime: 40, arrivalTime: "12:30",
+      patientInfo: { age: 45, service: "Hématologie", diagnosis: "Leucémie suspectée" }
+    },
+    {
+      id: "S018", priority: "URGENT", type: "BLOOD", analysisType: "Électrolytes",
+      analysisTime: 20, arrivalTime: "14:15",
+      patientInfo: { age: 81, service: "Gériatrie", diagnosis: "Déshydratation" }
+    },
+    {
+      id: "S020", priority: "URGENT", type: "TISSUE", analysisType: "Parasitologie",
+      analysisTime: 65, arrivalTime: "15:30",
+      patientInfo: { age: 12, service: "Pédiatrie", diagnosis: "Parasitose intestinale" }
+    },
+    // --- ROUTINE (8) ---
+    {
+      id: "S003", priority: "ROUTINE", type: "BLOOD", analysisType: "Bilan lipidique",
+      analysisTime: 30, arrivalTime: "09:00",
+      patientInfo: { age: 58, service: "Médecine générale", diagnosis: "Contrôle cholestérol" }
+    },
+    {
+      id: "S004", priority: "ROUTINE", type: "BLOOD", analysisType: "Hémogramme standard",
+      analysisTime: 25, arrivalTime: "09:15",
+      patientInfo: { age: 35, service: "Médecine du travail", diagnosis: "Visite systématique" }
+    },
+    {
+      id: "S006", priority: "ROUTINE", type: "BLOOD", analysisType: "Vaccination contrôle",
+      analysisTime: 35, arrivalTime: "10:00",
+      patientInfo: { age: 22, service: "Médecine préventive", diagnosis: "Titre anticorps" }
+    },
+    {
+      id: "S007", priority: "ROUTINE", type: "BLOOD", analysisType: "Conseil génétique",
+      analysisTime: 120, arrivalTime: "10:30",
+      patientInfo: { age: 28, service: "Consultation génétique", diagnosis: "Antécédents familiaux" }
+    },
+    {
+      id: "S010", priority: "ROUTINE", type: "TISSUE", analysisType: "Prélèvement gorge",
+      analysisTime: 45, arrivalTime: "11:15",
+      patientInfo: { age: 19, service: "ORL", diagnosis: "Angine récidivante" }
+    },
+    {
+      id: "S013", priority: "ROUTINE", type: "BLOOD", analysisType: "HbA1c",
+      analysisTime: 25, arrivalTime: "12:00",
+      patientInfo: { age: 52, service: "Endocrinologie", diagnosis: "Diabète type 2" }
+    },
+    {
+      id: "S015", priority: "ROUTINE", type: "BLOOD", analysisType: "Vitesse sédimentation",
+      analysisTime: 60, arrivalTime: "13:00",
+      patientInfo: { age: 65, service: "Rhumatologie", diagnosis: "Inflammation chronique" }
+    },
+    {
+      id: "S019", priority: "ROUTINE", type: "BLOOD", analysisType: "Pharmacogénétique",
+      analysisTime: 90, arrivalTime: "14:45",
+      patientInfo: { age: 47, service: "Oncologie", diagnosis: "Adaptation thérapie" }
+    }
+  ],
 
-// ---------------------------------------------------------
-// CAS 2 : PRIORITÉS (STAT vs URGENT)
-// Objectif : Valider que STAT passe devant même s'il arrive après.
-// ---------------------------------------------------------
-export const TEST_CASE_2: LabData = {
-    samples: [
-        {
-            id: "S001",
-            type: "BLOOD",
-            priority: "URGENT",
-            analysisTime: 45,
-            arrivalTime: "09:00",
-            patientId: "P001"
-        },
-        {
-            id: "S002",
-            type: "BLOOD",
-            priority: "STAT",
-            analysisTime: 30,
-            arrivalTime: "09:30",
-            patientId: "P002"
-        }
-    ],
-    technicians: [
-        {
-            id: "T001",
-            name: "Alice Martin",
-            speciality: "BLOOD",
-            startTime: "08:00",
-            endTime: "17:00"
-        }
-    ],
-    equipment: [
-        {
-            id: "E001",
-            name: "Analyseur Sang A",
-            type: "BLOOD",
-            available: true
-        }
-    ]
-};
+  technicians: [
+    // Spécialistes Seniors
+    { id: "TECH001", name: "Dr. Marie Dubois", specialty: ["BLOOD", "CHEMISTRY"], efficiency: 1.2, startTime: "07:30", endTime: "16:30", lunchBreak: "12:30-13:30" },
+    { id: "TECH002", name: "Jean-Pierre Martin", specialty: ["MICROBIOLOGY", "IMMUNOLOGY"], efficiency: 1.1, startTime: "08:00", endTime: "17:00", lunchBreak: "13:00-14:00" },
+    // Spécialistes Standards
+    { id: "TECH003", name: "Sophie Bernard", specialty: ["CHEMISTRY", "IMMUNOLOGY"], efficiency: 1.0, startTime: "08:00", endTime: "17:00", lunchBreak: "12:00-13:00" },
+    { id: "TECH004", name: "Lucas Petit", specialty: ["BLOOD", "GENETICS"], efficiency: 0.95, startTime: "09:00", endTime: "18:00", lunchBreak: "13:00-14:00" },
+    { id: "TECH005", name: "Emma Rousseau", specialty: ["MICROBIOLOGY"], efficiency: 1.0, startTime: "07:00", endTime: "16:00", lunchBreak: "12:30-13:30" },
+    { id: "TECH006", name: "Thomas Moreau", specialty: ["GENETICS", "IMMUNOLOGY"], efficiency: 0.9, startTime: "09:30", endTime: "18:30", lunchBreak: "13:30-14:30" },
+    // Techniciens Polyvalents
+    { id: "TECH007", name: "Camille Leroy", specialty: ["CHEMISTRY", "BLOOD", "IMMUNOLOGY"], efficiency: 1.05, startTime: "08:30", endTime: "17:30", lunchBreak: "12:00-13:00" },
+    { id: "TECH008", name: "Antoine Garnier", specialty: ["BLOOD", "MICROBIOLOGY"], efficiency: 0.85, startTime: "10:00", endTime: "19:00", lunchBreak: "14:00-15:00" }
+  ],
 
-// ---------------------------------------------------------
-// CAS 3 : RESSOURCES & CONFLITS
-// Objectif : Gérer les techniciens occupés et le type GENERAL.
-// ---------------------------------------------------------
-export const TEST_CASE_3: LabData = {
-    samples: [
-        {
-            id: "S001",
-            type: "BLOOD",
-            priority: "URGENT",
-            analysisTime: 60,
-            arrivalTime: "09:00",
-            patientId: "P001"
-        },
-        {
-            id: "S002",
-            type: "URINE",
-            priority: "URGENT",
-            analysisTime: 30,
-            arrivalTime: "09:15",
-            patientId: "P002"
-        },
-        {
-            id: "S003",
-            type: "BLOOD",
-            priority: "ROUTINE",
-            analysisTime: 45,
-            arrivalTime: "09:00",
-            patientId: "P003"
-        }
-    ],
-    technicians: [
-        {
-            id: "T001",
-            name: "Alice Blood",
-            speciality: "BLOOD",
-            startTime: "08:00",
-            endTime: "17:00"
-        },
-        {
-            id: "T002",
-            name: "Bob General",
-            speciality: "GENERAL",
-            startTime: "08:00",
-            endTime: "17:00"
-        }
-    ],
-    equipment: [
-        {
-            id: "E001",
-            name: "Analyz-O-Matic 3000",
-            type: "BLOOD",
-            available: true
-        },
-        {
-            id: "E002",
-            name: "Pee-O-Tron",
-            type: "URINE",
-            available: true
-        }
-    ]
+  equipment: [
+    { id: "EQ001", name: "Analyseur Hématologie", type: "BLOOD", compatibleTypes: ["Hémogramme", "Numération", "Coagulation", "Frottis"], capacity: 2, maintenanceWindow: "06:00-07:00", cleaningTime: 10 },
+    { id: "EQ002", name: "Automate Biochimie", type: "CHEMISTRY", compatibleTypes: ["Bilan hépatique", "Lipides", "Électrolytes", "Troponine", "HbA1c"], capacity: 3, maintenanceWindow: "06:30-07:30", cleaningTime: 15 },
+    { id: "EQ003", name: "Station Microbiologie", type: "MICROBIOLOGY", compatibleTypes: ["ECBU", "Hémoculture", "Parasitologie", "Prélèvement gorge"], capacity: 2, maintenanceWindow: "07:00-08:00", cleaningTime: 20 },
+    { id: "EQ004", name: "Système Immunologie", type: "IMMUNOLOGY", compatibleTypes: ["Sérologie", "Allergènes", "Vaccination", "Titre anticorps"], capacity: 2, maintenanceWindow: "05:30-06:30", cleaningTime: 12 },
+    { id: "EQ005", name: "Séquenceur Génétique", type: "GENETICS", compatibleTypes: ["Caryotype", "Conseil génétique", "Pharmacogénétique"], capacity: 1, maintenanceWindow: "19:00-20:00", cleaningTime: 30 }
+  ]
 };

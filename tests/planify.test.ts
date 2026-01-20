@@ -1,50 +1,45 @@
-import { planifyLab } from '../src/index';
-import { TEST_CASE_2, TEST_CASE_3 } from '../src/mocks';
+import { sortSamples } from "../src/index";
+import { Sample, Priority } from "../src/types";
 
-describe('Algorithme de Planification', () => {
-    
-    test('Doit trier les priorités : STAT passe avant URGENT', () => {
-        // On vérifie l'état avant (Juste pour être sûr)
-        // Dans le mock, S001 (URGENT) est à l'index 0
-        expect(TEST_CASE_2.samples[0].priority).toBe('URGENT');
+// Helper
+const createMockSample = (id: string, priority: Priority, arrivalTime: string): Sample => ({
+    id,
+    priority,
+    arrivalTime,
+    type: 'BLOOD',
+    analysisType: 'Test',
+    analysisTime: 30,
+    patientInfo: { age: 0, service: '', diagnosis: '' }
+});
 
-        // On lance la fonction
-        planifyLab(TEST_CASE_2);
 
-        // On vérifie le résultat
-        // Maintenant, S002 (STAT) doit être passé à l'index 0
-        expect(TEST_CASE_2.samples[0].priority).toBe('STAT');
-        expect(TEST_CASE_2.samples[0].id).toBe('S002');
+describe('Phase 1: Tri des échantillons', () => {
+
+    test('Doit trier correctement STAT > URGENT > ROUTINE', () => {
+        // 1. Préparation (Arrange)
+        const input: Sample[] = [
+            createMockSample("S1", "ROUTINE", "10:00"),
+            createMockSample("S2", "URGENT", "09:00"),
+            createMockSample("S3", "STAT", "12:00"),
+            createMockSample("S4", "STAT", "08:00"), 
+        ];
+
+        // 2. Action (Act)
+        const result = sortSamples(input);
+
+        // 3. Vérification (Assert)
         
-        // Et S001 doit être descendu à l'index 1
-        expect(TEST_CASE_2.samples[1].id).toBe('S001');
-    });
-
-    test('Doit gérer le temps : S003 doit attendre que Alice (T001) finisse S001', () => {
-        // On lance la planification
-        const result = planifyLab(TEST_CASE_3);
-
-        // On cherche la ligne du planning pour S003
-        const s003Entry = result.schedule.find(entry => entry.sampleId === 'S003');
-
-        // Alice commence S001 à 09:00 pour 60min -> Elle finit à 10:00.
-        // S003 arrive à 09:00, mais il DOIT attendre 10:00.
-        expect(s003Entry?.startTime).toBe('10:00');
-    });
-
-    test('Doit calculer els métriques : temps total, efficacité, conflits', () => {
-        // On lance la planification
-        const result = planifyLab(TEST_CASE_3);
+        // Vérif 1: Le premier doit être STAT
+        expect(result[0].priority).toBe('STAT');
         
-        // Temps Total : 09:00 à 10:45 = 105 minutes
-        expect(result.metrics.totalTime).toBe(105);
+        // Vérif 2: Le premier doit être S4 (08h00) pas S3 (12h00)
+        expect(result[0].id).toBe('S4');
 
-        // Efficacité : 60 + 45 = 105 minutes d'analyse sur un équipement et 30 minutes sur un autre équipement
-        // Du coup on a 135min d'analyse mais en 105min de temps total
-        expect(result.metrics.efficiency).toBe(129);
+        // Vérif 3: L'ordre exact des IDs
+        const expectedIds = ["S4", "S3", "S2", "S1"];
+        const actualIds = result.map(s => s.id);
         
-        // Conflits : Toujours 0
-        expect(result.metrics.conflicts).toBe(0);
+        expect(actualIds).toEqual(expectedIds);
     });
 
 });
