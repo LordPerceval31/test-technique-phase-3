@@ -3,7 +3,7 @@ import { TEST_CASE_2, TEST_CASE_3 } from '../src/mocks';
 
 describe('Algorithme de Planification', () => {
     
-    test('DOIT trier les priorités : STAT passe avant URGENT', () => {
+    test('Doit trier les priorités : STAT passe avant URGENT', () => {
         // On vérifie l'état avant (Juste pour être sûr)
         // Dans le mock, S001 (URGENT) est à l'index 0
         expect(TEST_CASE_2.samples[0].priority).toBe('URGENT');
@@ -20,7 +20,7 @@ describe('Algorithme de Planification', () => {
         expect(TEST_CASE_2.samples[1].id).toBe('S001');
     });
 
-    test('DOIT gérer le temps : S003 doit attendre que Alice (T001) finisse S001', () => {
+    test('Doit gérer le temps : S003 doit attendre que Alice (T001) finisse S001', () => {
         // On lance la planification
         const result = planifyLab(TEST_CASE_3);
 
@@ -30,6 +30,21 @@ describe('Algorithme de Planification', () => {
         // Alice commence S001 à 09:00 pour 60min -> Elle finit à 10:00.
         // S003 arrive à 09:00, mais il DOIT attendre 10:00.
         expect(s003Entry?.startTime).toBe('10:00');
+    });
+
+    test('Doit calculer els métriques : temps total, efficacité, conflits', () => {
+        // On lance la planification
+        const result = planifyLab(TEST_CASE_3);
+        
+        // Temps Total : 09:00 à 10:45 = 105 minutes
+        expect(result.metrics.totalTime).toBe(105);
+
+        // Efficacité : 60 + 45 = 105 minutes d'analyse sur un équipement et 30 minutes sur un autre équipement
+        // Du coup on a 135min d'analyse mais en 105min de temps total
+        expect(result.metrics.efficiency).toBe(129);
+        
+        // Conflits : Toujours 0
+        expect(result.metrics.conflicts).toBe(0);
     });
 
 });

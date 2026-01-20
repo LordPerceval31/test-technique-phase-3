@@ -18,6 +18,7 @@ export const planifyLab = (data: LabData): LabOutput => {
 
     const schedule: ScheduleEntry[] = [];
     const agenda: Record<string, number> = {};
+    let totalAnalysisTime = 0;
 
     samples.forEach((sample => {
 
@@ -58,11 +59,41 @@ export const planifyLab = (data: LabData): LabOutput => {
                 endTime: minutesToTime(actualEnd),
                 priority: sample.priority
             });
+            totalAnalysisTime += sample.analysisTime;
+
         }
     }));
+    if (schedule.length === 0) {
+        return {
+            schedule: [],
+            metrics: {
+                totalTime: 0,
+                efficiency: 0,
+                conflicts: 0
+            }
+        };
+    }
+
+    // On trie le planning par heure de début
+    schedule.sort((a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+
+    /// On récupère le premier début et le dernier fin pour calculer le temps total
+    const firstStart = timeToMinutes(schedule[0].startTime);
+    const lastEnd = Math.max(...schedule.map(schedule => timeToMinutes(schedule.endTime)));
+    const totalTime = lastEnd - firstStart;
+
+    // Efficacité = (Temps total d'analyse / Temps total du planning) * 100
+    const efficiency = totalTime > 0 
+        ? Math.round((totalAnalysisTime / totalTime) * 100 * 10) / 10 
+        : 0;
+
     return {
-        schedule: schedule,
-        metrics: { totalTime: 0, efficiency: 0, conflicts: 0 }
+        schedule,
+        metrics: {
+            totalTime,
+            efficiency: Math.round(efficiency),
+            conflicts: 0
+        }
     };
 }
 
