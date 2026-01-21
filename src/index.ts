@@ -1,7 +1,7 @@
 import { minutesToTime, timeToMinutes } from "./dateUtils";
 import { LabData, LabOutput, ScheduleEntry, Technician, TechSpecialty } from "./types";
 
-// 1. définir les analyseType des samples avec la spécialité des techniciens
+// Définir les analyseType des samples avec la spécialité des techniciens
 const ANALYSIS_REQUIREMENTS: Record<string, TechSpecialty> = {
     "Numération complète": "BLOOD",
     "Bilan hépatique": "CHEMISTRY",
@@ -25,20 +25,59 @@ const ANALYSIS_REQUIREMENTS: Record<string, TechSpecialty> = {
     "Parasitologie": "MICROBIOLOGY"
 };
 
-// définir la priorité des échantillons
+// Définir la priorité des échantillons
 const PRIORITY_SCORE: Record<string, number> = {
     'STAT': 1,
     'URGENT': 2,
     'ROUTINE': 3
 };
 
-// Fonction de tri des échantillons
+// Fonction de tri des échantillons par ordre de priorité
 export const sortSamples = (samples: any[]) => {
     return [...samples].sort((a, b) => {
         const priorityDiff = PRIORITY_SCORE[a.priority] - PRIORITY_SCORE[b.priority];
         if (priorityDiff !== 0) return priorityDiff;
         return a.arrivalTime.localeCompare(b.arrivalTime);
     });
+};
+
+// Fonction pour empêcher les techniciens de travailler pendant leur pose déjeuné
+export const adjustForLunchBreak = (startTime: number, duration: number, lunchBreak: string): number => {
+    
+    if (!lunchBreak) return startTime
+
+    // On sépare la lunchbreak en départ de déj et fin du déj
+    const [lunchStart, LunchEnd] = lunchBreak.split('-')
+
+    // Conversion en minutes des départ et fin du déjeuné
+    const lunchStartMinutes = timeToMinutes(lunchStart);
+    const lunchEndMinutes = timeToMinutes(LunchEnd)
+
+    // Fin d'une analyse
+    const taskEnd = startTime + duration;
+
+    if (startTime < lunchEndMinutes && taskEnd > lunchStartMinutes) {
+        // comme l'analyse se fini pendant la pause déjeuné, on décalle celle-ci à la fin de la pause.
+        return lunchEndMinutes;
+    }
+    // Sinon, c'est bon, on garde l'heure prévue
+    return startTime;
+};
+
+// Fonction pour vérifier si le créneau proposé tombe pendant la maintenance
+const isMaintenanceConflict = (startTime: number, duration: number, maintenanceWindow: string): boolean => {
+    if (!maintenanceWindow) return false;
+
+    // On sépare Le début et la fin de la maintenance
+    const [maintStart, maintEnd] = maintenanceWindow.split('-');
+    
+    // Conversion en minutes du début et de la fin des maintenances
+    const maintStartMinutes = timeToMinutes(maintStart);
+    const maintEndMinutes = timeToMinutes(maintEnd);
+    
+    const taskEnd = startTime + duration;
+
+    return startTime < maintEndMinutes && taskEnd > maintStartMinutes;
 };
 
 export const planifyLab = (data: LabData): LabOutput => {
@@ -88,10 +127,27 @@ export const planifyLab = (data: LabData): LabOutput => {
                 
                 // Le début réel d'une analyse (l'heure d'arrivé de l'échantillon, la disponibilité d'un technicien et la disponibilité d'un équipement)
                 // Math.max parce que c'est le plus grand nombre des trois valeurs qui déterminera quand ça commence
-                const possibleStart = Math.max(sampleArrivedTime, techAvailableAt, equipAvailableAt);
+                let possibleStart = Math.max(sampleArrivedTime, techAvailableAt, equipAvailableAt);
+
+                // Si ça tombe pendant la maintenance, on décale à la fin de la maintenance
+                if (isMaintenanceConflict(possibleStart, realDuration, availableEquipment.maintenanceWindow)) {
+                     const [_start, maintenanceEnd] = availableEquipment.maintenanceWindow.split('-');
+                     // L'analyse est repoussée à la fin de la maintenance
+                     possibleStart = Math.max(possibleStart, timeToMinutes(maintenanceEnd));
+                }
+
+                // On vérifie si l'analyse peut se faire avant que la pause déjeuné arrive
+                possibleStart = adjustForLunchBreak(possibleStart, realDuration, tech.lunchBreak);
 
                 // La fin réel d'une analyse (le début réel + la durée réelle)
                 const possibleEnd = possibleStart + realDuration;
+
+                // Conversion de la fin de service en minutes
+                const teckShiftEnd = timeToMinutes(tech.endTime)
+
+                // Si la fin d'une analyse est après la fin de service du technicien, il la prends pas
+                if (possibleEnd > teckShiftEnd)
+                    return
 
                 // On cherche celui qui finit le plus tôt
                 if (possibleEnd < bestEndTime) {

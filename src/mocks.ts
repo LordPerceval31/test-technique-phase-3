@@ -1,4 +1,4 @@
-import { LabData } from './types'; // Assure-toi que le fichier d'interfaces s'appelle 'types.ts'
+import { LabData } from './types';
 
 export const MOCK_DATA: LabData = {
   samples: [
@@ -108,15 +108,12 @@ export const MOCK_DATA: LabData = {
   ],
 
   technicians: [
-    // Spécialistes Seniors
     { id: "TECH001", name: "Dr. Marie Dubois", specialty: ["BLOOD", "CHEMISTRY"], efficiency: 1.2, startTime: "07:30", endTime: "16:30", lunchBreak: "12:30-13:30" },
     { id: "TECH002", name: "Jean-Pierre Martin", specialty: ["MICROBIOLOGY", "IMMUNOLOGY"], efficiency: 1.1, startTime: "08:00", endTime: "17:00", lunchBreak: "13:00-14:00" },
-    // Spécialistes Standards
     { id: "TECH003", name: "Sophie Bernard", specialty: ["CHEMISTRY", "IMMUNOLOGY"], efficiency: 1.0, startTime: "08:00", endTime: "17:00", lunchBreak: "12:00-13:00" },
     { id: "TECH004", name: "Lucas Petit", specialty: ["BLOOD", "GENETICS"], efficiency: 0.95, startTime: "09:00", endTime: "18:00", lunchBreak: "13:00-14:00" },
     { id: "TECH005", name: "Emma Rousseau", specialty: ["MICROBIOLOGY"], efficiency: 1.0, startTime: "07:00", endTime: "16:00", lunchBreak: "12:30-13:30" },
     { id: "TECH006", name: "Thomas Moreau", specialty: ["GENETICS", "IMMUNOLOGY"], efficiency: 0.9, startTime: "09:30", endTime: "18:30", lunchBreak: "13:30-14:30" },
-    // Techniciens Polyvalents
     { id: "TECH007", name: "Camille Leroy", specialty: ["CHEMISTRY", "BLOOD", "IMMUNOLOGY"], efficiency: 1.05, startTime: "08:30", endTime: "17:30", lunchBreak: "12:00-13:00" },
     { id: "TECH008", name: "Antoine Garnier", specialty: ["BLOOD", "MICROBIOLOGY"], efficiency: 0.85, startTime: "10:00", endTime: "19:00", lunchBreak: "14:00-15:00" }
   ],
