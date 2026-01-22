@@ -18,6 +18,12 @@ export class ToolService {
             }
         });
     }
+
+    async getOneTool(id: number) {
+        return await this.toolRepository.findOneBy({ id: id });
+    }
+
+
     async create(toolData: any) {
 
         // Création des datas du nouvel outil
@@ -31,5 +37,10 @@ export class ToolService {
         // On supprime l'outil suivant son id
         return await this.toolRepository.delete(id)
 
+    }
+
+    async update(id: number, toolData: any) {
+        // On met à jour l'outil suivant son id
+        return await this.toolRepository.update(id, toolData)
     }
 }

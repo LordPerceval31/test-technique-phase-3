@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import { AppDataSource } from "./src/data-source";
 import { ToolController } from "./src/controllers/toolController";
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './src/swagger';
 
 dotenv.config();
 
@@ -21,12 +23,21 @@ app.get('/', (req, res) => {
 
 // Route pour récupérer tous les outils
 app.get('/api/tools', toolController.getAll)
+// Route pour récupérer un outil en particulier
+app.get('/api/tools/:id', toolController.getOne)
 
 // Route pour créer un nouvel outil
 app.post('/api/tools', toolController.create)
 
-// Route pour supprimer un outils
+// Route pour supprimer un outil
 app.delete('/api/tools/:id', toolController.delete)
+
+// Route pour mettre à jour un outil
+app.put('/api/tools/:id', toolController.update)
+
+
+// Route de la documentation Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 console.log("Tentative de connexion à la Base de Données...");
