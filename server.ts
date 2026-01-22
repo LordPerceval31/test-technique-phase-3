@@ -22,6 +22,9 @@ app.get('/', (req, res) => {
 // Route pour récupérer tous les outils
 app.get('/api/tools', toolController.getAll)
 
+// Route pour créer un nouvel outil
+app.post('/api/tools', toolController.create)
+
 
 console.log("Tentative de connexion à la Base de Données...");
 
