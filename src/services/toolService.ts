@@ -26,4 +26,10 @@ export class ToolService {
         // On sauvegarde le nouvel outil dans la BDD
         return await this.toolRepository.save(newTool)
     }
+
+    async delete(id: number) {
+        // On supprime l'outil suivant son id
+        return await this.toolRepository.delete(id)
+
+    }
 }

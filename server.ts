@@ -25,6 +25,9 @@ app.get('/api/tools', toolController.getAll)
 // Route pour créer un nouvel outil
 app.post('/api/tools', toolController.create)
 
+// Route pour supprimer un outils
+app.delete('/api/tools/:id', toolController.delete)
+
 
 console.log("Tentative de connexion à la Base de Données...");
 

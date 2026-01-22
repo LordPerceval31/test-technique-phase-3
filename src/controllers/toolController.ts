@@ -37,4 +37,27 @@ export class ToolController {
             res.status(500).json({ error: "Impossible de créer l'outil" });
         }
     }
+
+    // Route DELETE
+    delete = async (req: Request, res: Response) => {
+        try {
+            const toolId = parseInt(req.params.id as string, 10);
+
+            // On récupère le résultat de la suppression
+            const result = await this.toolService.delete(toolId);
+
+            // result.affected contient le nombre de lignes supprimées
+            // Si c'est 0, c'est que l'outil n'existait pas
+            if (result.affected === 0) {
+                return res.status(404).json({ error: "Outil non trouvé" });
+            }
+
+            // Si c'est bon -> 204
+            res.status(204).send(); 
+
+        } catch (error) {
+            console.error("Erreur delete:", error);
+            res.status(500).json({ error: "Impossible de supprimer l'outil" });
+        }
+    }
 }
