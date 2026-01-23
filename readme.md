@@ -1,284 +1,97 @@
-# 🛠️ Internal Tools API
+# Internal Tools API
 
-API REST pour la gestion des outils internes d'une entreprise, développée avec Node.js, TypeScript, Express et TypeORM.
+Backend de gestion d'outils internes pour TechCorp Solutions. API RESTful permettant le suivi des coûts, des accès et de l'usage des outils SaaS.
 
-## 📋 Table des matières
+## Technologies
+- **Langage:** Node.js / TypeScript
+- **Framework:** Express.js 
+- **Base de données:** MySQL 8.0
+- **ORM:** TypeORM
+- **Documentation:** Swagger (OpenAPI 3.0)
+- **Port API:** 3000 (configurable via `.env`)
 
-- [Vue d'ensemble](#-vue-densemble)
-- [Fonctionnalités](#-fonctionnalités)
-- [Technologies utilisées](#-technologies-utilisées)
-- [Prérequis](#-prérequis)
-- [Installation](#-installation)
-- [Configuration](#-configuration)
-- [Démarrage](#-démarrage)
-- [Architecture du projet](#-architecture-du-projet)
-- [API Endpoints](#-api-endpoints)
-- [Documentation Swagger](#-documentation-swagger)
-- [Scripts disponibles](#-scripts-disponibles)
-- [Bases de données](#-bases-de-données)
+## Quick Start
 
----
+### Prérequis
+* Docker et Docker Compose installés.
+* Ports 3000 et 8080 disponibles.
 
-## 🎯 Vue d'ensemble
+### Démarrage complet (Recommandé)
 
-Cette API permet de gérer un inventaire d'outils internes utilisés par une entreprise. Elle permet de créer, lire, modifier et supprimer des outils, tout en gardant une trace des coûts mensuels, des départements propriétaires et du nombre d'utilisateurs actifs.
+1. **Lancer l'environnement (BDD + API + Admin) :**
+   docker-compose up --build
 
-## ✨ Fonctionnalités
-
-- ✅ CRUD complet sur les outils (Create, Read, Update, Delete)
-- 🔍 Filtrage des outils par département
-- 💰 Suivi des coûts mensuels
-- 👥 Gestion du nombre d'utilisateurs actifs
-- 📊 Catégorisation des outils
-- 🔄 Statuts d'outils (active, deprecated, trial)
-- 📖 Documentation API interactive avec Swagger
-- 🐬 Support MySQL avec phpMyAdmin
-- 🐘 Support PostgreSQL avec pgAdmin (architecture préparée)
-
-## 🚀 Technologies utilisées
-
-- **Runtime**: Node.js avec TypeScript
-- **Framework**: Express 5
-- **ORM**: TypeORM
-- **Base de données**: MySQL 8.0
-- **Documentation**: Swagger UI
-- **Containerisation**: Docker & Docker Compose
-- **Dev Tools**: Nodemon, ts-node
-
-## 📦 Prérequis
-
-Avant de commencer, assurez-vous d'avoir installé :
-
-- [Docker](https://www.docker.com/get-started) (version 20.10+)
-- [Docker Compose](https://docs.docker.com/compose/install/) (version 2.0+)
-- [Node.js](https://nodejs.org/) (version 18+ recommandée)
-- [npm](https://www.npmjs.com/) ou [yarn](https://yarnpkg.com/)
-
-## 🔧 Installation
-
-1. **Cloner le projet**
-```bash
-git clone <url-du-repo>
-cd internal-tools-api
-```
-
-2. **Installer les dépendances**
-```bash
+Installation des dépendances (si lancement local hors Docker) :
 npm install
-```
 
-3. **Créer le fichier `.env`**
+Démarrage du serveur (si lancement local hors Docker) :
 
-Créez un fichier `.env` à la racine du projet avec les variables suivantes :
+npm run dev
 
-```env
-# MySQL Configuration
-MYSQL_ROOT_PASSWORD=rootpassword
+
+Accès à l'API :
+
+API Root : http://localhost:3000/api/tools
+
+Documentation :
+
+Swagger UI : http://localhost:3000/api-docs
+
+
+# Configuration
+Variables d'environnement
+Créez un fichier .env à la racine basé sur cet exemple :
+
+Ini, TOML
+
+# --- DATABASE ---
+MYSQL_HOST=mysql
+MYSQL_PORT=3306
 MYSQL_DATABASE=internal_tools
+MYSQL_ROOT_PASSWORD=root
 MYSQL_USER=dev
 MYSQL_PASSWORD=dev123
-MYSQL_PORT=3306
 
-# phpMyAdmin
+# --- API ---
+PORT=3000
+
+# --- TOOLS ---
 PHPMYADMIN_PORT=8080
-```
+Configuration DB
+Host: mysql (dans Docker) ou localhost (en local)
 
-## ⚙️ Configuration
+Interface Admin: PhpMyAdmin disponible sur http://localhost:8080
 
-Le projet est configuré pour fonctionner avec MySQL :
+Credentials: User: dev / Password: dev123
 
-## 🚀 Démarrage
+# Tests
+npm test
+Note : Lance les tests unitaires (Jest) et les tests d'intégration.
 
-### Démarrage avec MySQL
+### Architecture Logicielle
+* **Architecture MVC (Model-View-Controller) :** Séparation stricte des responsabilités.
+    * **Controllers :** Gèrent la logique métier, la validation des entrées et les codes HTTP.
+    * **Entities (Models) :** Définissent la structure des données et les relations via TypeORM.
+    * **Services (implicites) :** La logique complexe est découplée des routes pour être testable.
 
-1. **Lancer la stack MySQL**
-```bash
-chmod +x start-mysql.sh
-./start-mysql.sh
-```
+### Stack Technologique
+* **TypeScript :** Choisi pour son typage statique strict. Il sécurise le développement, réduit les bugs de runtime et sert de documentation vivante pour les structures de données (DTOs).
+* **Express.js :** Framework standard de l'industrie, sélectionné pour sa légèreté, sa performance et sa maturité.
+* **TypeORM & MySQL :** Utilisation d'un ORM pour l'abstraction de la base de données. Permet de manipuler les données via des objets (Pattern Data Mapper/Active Record) tout en protégeant contre les injections SQL.
+* **Docker :** Conteneurisation complète de l'application (API + BDD + Admin) pour garantir la reproductibilité de l'environnement (élimine le *"ça marche sur ma machine"*).
 
-2. **Démarrer l'API en mode développement**
-```bash
-npm run dev
-```
+### Documentation & Qualité
+* **Swagger (Code-First) :** La documentation OpenAPI est générée directement depuis les commentaires du code (`swagger-jsdoc`), garantissant qu'elle reste toujours synchronisée avec l'implémentation réelle.
+* **Outillage DX (Developer Experience) :** Utilisation de `nodemon` pour le hot-reload et `dotenv` pour une gestion sécurisée des secrets d'environnement.
 
-L'API sera accessible sur : `http://localhost:3000`
-
-### Autres commandes utiles
-
-**Tester les connexions aux bases de données**
-```bash
-chmod +x test-connections.sh
-./test-connections.sh
-```
-
-**Réinitialiser toutes les données**
-```bash
-chmod +x reset-all.sh
-./reset-all.sh
-```
-
-## 📁 Architecture du projet
-
-```
-internal-tools-api/
-│
-├── src/
-│   ├── controllers/
-│   │   └── toolController.ts      # Gestion des requêtes HTTP
-│   │
-│   ├── services/
-│   │   └── toolService.ts         # Logique métier
-│   │
-│   ├── repositories/
-│   │   └── toolRepository.ts      # (Vide - géré par TypeORM)
-│   │
-│   ├── entities/
-│   │   └── Tool.ts                # Modèle de données TypeORM
-│   │
-│   ├── data-source.ts             # Configuration TypeORM
-│   └── swagger.ts                 # Configuration Swagger
-│
-├── mysql/
-│   └── init.sql                   # Script d'initialisation MySQL
-│
-├── server.ts                      # Point d'entrée de l'application
-├── docker-compose.yml             # Configuration Docker
-├── Dockerfile                     # Image Docker de l'API
-├── package.json                   # Dépendances Node.js
-└── tsconfig.json                  # Configuration TypeScript
-```
-
-### Explication de l'architecture
-
-L'application suit une **architecture en couches** :
-
-1. **Controller** (`toolController.ts`) 
-   - Reçoit les requêtes HTTP
-   - Valide les paramètres
-   - Appelle le service approprié
-   - Retourne la réponse au client
-
-2. **Service** (`toolService.ts`)
-   - Contient la logique métier
-   - Interagit avec le repository
-   - Traite les données
-
-3. **Repository** (géré par TypeORM)
-   - Gère l'accès aux données
-   - Exécute les requêtes SQL
-
-4. **Entity** (`Tool.ts`)
-   - Définit le modèle de données
-   - Mapping avec la table SQL
-
-## 🌐 API Endpoints
-
-### Outils (Tools)
-
-| Méthode | Endpoint | Description |
-|---------|----------|-------------|
-| `GET` | `/api/tools` | Récupère tous les outils |
-| `GET` | `/api/tools?department=IT` | Filtre les outils par département |
-| `GET` | `/api/tools/:id` | Récupère un outil spécifique |
-| `POST` | `/api/tools` | Crée un nouvel outil |
-| `PUT` | `/api/tools/:id` | Met à jour un outil |
-| `DELETE` | `/api/tools/:id` | Supprime un outil |
-
-### Exemples de requêtes
-
-**Créer un outil**
-```bash
-curl -X POST http://localhost:3000/api/tools \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Notion",
-    "description": "Outil de prise de notes collaboratif",
-    "vendor": "Notion Labs",
-    "websiteUrl": "https://notion.so",
-    "categoryId": 2,
-    "monthlyCost": 200.00,
-    "activeUsersCount": 30,
-    "ownerDepartment": "Marketing",
-    "status": "active"
-  }'
-```
-
-**Récupérer tous les outils du département IT**
-```bash
-curl http://localhost:3000/api/tools?department=IT
-```
-
-## 📖 Documentation Swagger
-
-Une documentation interactive complète est disponible via Swagger UI :
-
-🔗 **URL** : `http://localhost:3000/api-docs`
-
-Swagger permet de :
-- Visualiser tous les endpoints disponibles
-- Tester les requêtes directement depuis l'interface
-- Voir les schémas de données
-- Comprendre les paramètres requis
-
-## 📜 Scripts disponibles
-
-| Script | Commande | Description |
-|--------|----------|-------------|
-| Développement | `npm run dev` | Lance l'API avec hot-reload |
-| MySQL Stack | `./start-mysql.sh` | Démarre MySQL + phpMyAdmin |
-| PostgreSQL Stack | `./start-postgres.sh` | Démarre PostgreSQL + pgAdmin |
-| Test connexions | `./test-connections.sh` | Vérifie les connexions BDD |
-| Reset | `./reset-all.sh` | Réinitialise toutes les données |
-
-## 🗄️ Bases de données
-
-### MySQL
-
-**Accès phpMyAdmin** : `http://localhost:8080`
-- Serveur : `mysql`
-- Utilisateur : `dev` (ou celui défini dans `.env`)
-- Mot de passe : `dev123` (ou celui défini dans `.env`)
-
-**Structure de la table `tools`**
-```sql
-CREATE TABLE tools (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    description TEXT,
-    vendor VARCHAR(255),
-    website_url VARCHAR(500),
-    category_id INT NOT NULL,
-    monthly_cost DECIMAL(10,2) NOT NULL,
-    active_users_count INT DEFAULT 0,
-    owner_department VARCHAR(100) NOT NULL,
-    status ENUM('active', 'deprecated', 'trial') DEFAULT 'active',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-```
-
-## 🐛 Dépannage
-
-**Problème : L'API ne démarre pas**
-- Vérifiez que MySQL est bien démarré : `docker ps`
-- Vérifiez les logs : `docker logs internal-tools-api`
-
-**Problème : Erreur de connexion à MySQL**
-- Vérifiez le fichier `.env`
-- Testez la connexion : `./test-connections.sh`
-- Redémarrez les containers : `docker-compose --profile mysql restart`
-
-**Problème : Port déjà utilisé**
-- Modifiez les ports dans le fichier `.env`
-- Redémarrez les services
-
-## 📝 Bonnes pratiques
-
-- ✅ Toujours utiliser TypeScript pour la type safety
-- ✅ Documenter les nouveaux endpoints dans Swagger
-- ✅ Tester les endpoints via Swagger UI avant de commiter
-- ✅ Utiliser des transactions pour les opérations critiques
-- ✅ Valider les données côté serveur
-
-
+## Structure du projet
+.
+├── src
+│   ├── controllers    # Logique métier et validation des entrées (Business Logic)
+│   ├── entity         # Modèles de données TypeORM (Data Layer)
+│   ├── swagger.ts     # Configuration de la documentation API
+│   ├── data-source.ts # Configuration de la connexion MySQL
+│   └── server.ts      # Point d'entrée et configuration Express
+├── init.sql           # Script d'initialisation et de seeding de la BDD
+├── docker-compose.yml # Orchestration des conteneurs (API + MySQL + PhpMyAdmin)
+└── package.json       # Dépendances et scripts

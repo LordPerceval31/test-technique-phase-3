@@ -9,7 +9,7 @@ import { swaggerSpec } from './src/swagger';
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Middleware pour transformer le json du client en javascript
 app.use(express.json());
@@ -45,10 +45,14 @@ console.log("Tentative de connexion à la Base de Données...");
 AppDataSource.initialize()
     .then(() => {
         console.log("📦 Data Source connectée !");
-        app.listen(port, () => {
-            console.log(`🚀 SERVEUR PRÊT : http://localhost:${port}`);
-        });
+        if (process.env.NODE_ENV !== 'test') {
+            app.listen(port, () => {
+                console.log(`🚀 SERVEUR PRÊT : http://localhost:${port}`);
+            });
+        }
     })
     .catch((err) => {
         console.error("❌ CRASH BDD", err);
     });
+
+export default app;
