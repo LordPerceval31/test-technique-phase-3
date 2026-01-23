@@ -30,6 +30,9 @@ app.get('/api/tools/:id', toolController.getOne)
 // Route pour afficher les coûts des départements
 app.get('/api/analytics/department-costs', analyticController.getDepartmentCosts);
 
+// Route pour identifie les outils les plus chers par utilisateur et calculer les économies potentielles
+app.get('/api/analytics/expensive-tools', analyticController.getExpensiveTools)
+
 // Route pour créer un nouvel outil
 app.post('/api/tools', toolController.create)
 
