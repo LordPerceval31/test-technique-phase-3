@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from "typeorm";
+import { Category } from "./Category";
 
 @Entity({ name: "tools" })
 export class Tool {
@@ -41,4 +42,8 @@ export class Tool {
 
     @UpdateDateColumn({ name: "updated_at" })
     updatedAt!: Date;
+
+    @ManyToOne(() => Category, (category) => category.tools)
+    @JoinColumn({ name: "category_id" })
+    category: Category;
 }

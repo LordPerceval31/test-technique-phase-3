@@ -6,66 +6,66 @@ import { Tool } from "../entity/Tool";
 /**
  * @swagger
  * components:
- * schemas:
- * Tool:
- * type: object
- * required:
- * - name
- * - categoryId
- * - monthlyCost
- * - ownerDepartment
- * properties:
- * id:
- * type: integer
- * description: ID auto-généré de l'outil
- * name:
- * type: string
- * description: Nom de l'outil
- * description:
- * type: string
- * description: Description de l'outil
- * vendor:
- * type: string
- * description: Fournisseur de l'outil
- * websiteUrl:
- * type: string
- * description: URL du site web de l'outil
- * categoryId:
- * type: integer
- * description: ID de la catégorie
- * monthlyCost:
- * type: number
- * format: decimal
- * description: Coût mensuel de l'outil
- * activeUsersCount:
- * type: integer
- * description: Nombre d'utilisateurs actifs
- * ownerDepartment:
- * type: string
- * description: Département propriétaire
- * status:
- * type: string
- * enum: [active, deprecated, trial]
- * description: Statut de l'outil
- * createdAt:
- * type: string
- * format: date-time
- * description: Date de création
- * updatedAt:
- * type: string
- * format: date-time
- * description: Date de dernière mise à jour
- * example:
- * id: 1
- * name: "Slack"
- * description: "Outil de communication d'équipe"
- * vendor: "Slack Technologies"
- * websiteUrl: "https://slack.com"
- * categoryId: 1
- * monthlyCost: 150.00
- * activeUsersCount: 50
- * ownerDepartment: "IT"
- * status: "active"
+ *   schemas:
+ *     Tool:
+ *       type: object
+ *       required:
+ *         - name
+ *         - categoryId
+ *         - monthlyCost
+ *         - ownerDepartment
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: ID auto-généré de l'outil
+ *         name:
+ *           type: string
+ *           description: Nom de l'outil
+ *         description:
+ *           type: string
+ *           description: Description de l'outil
+ *         vendor:
+ *           type: string
+ *           description: Fournisseur de l'outil
+ *         websiteUrl:
+ *           type: string
+ *           description: URL du site web de l'outil
+ *         categoryId:
+ *           type: integer
+ *           description: ID de la catégorie
+ *         monthlyCost:
+ *           type: number
+ *           format: decimal
+ *           description: Coût mensuel de l'outil
+ *         activeUsersCount:
+ *           type: integer
+ *           description: Nombre d'utilisateurs actifs
+ *         ownerDepartment:
+ *           type: string
+ *           description: Département propriétaire
+ *         status:
+ *           type: string
+ *           enum: [active, deprecated, trial]
+ *           description: Statut de l'outil
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date de création
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date de dernière mise à jour
+ *       example:
+ *         id: 1
+ *         name: "Slack"
+ *         description: "Outil de communication d'équipe"
+ *         vendor: "Slack Technologies"
+ *         websiteUrl: "https://slack.com"
+ *         categoryId: 1
+ *         monthlyCost: 150.00
+ *         activeUsersCount: 50
+ *         ownerDepartment: "IT"
+ *         status: "active"
  */
 export class ToolController {
 
@@ -75,32 +75,32 @@ export class ToolController {
     /**
      * @swagger
      * /api/tools:
-     * get:
-     * summary: Récupère tous les outils
-     * description: Retourne la liste de tous les outils, avec possibilité de filtrer par département
-     * tags: [Tools]
-     * parameters:
-     * - in: query
-     * name: department
-     * schema:
-     * type: string
-     * description: Filtrer par département (optionnel)
-     * example: "IT"
-     * responses:
-     * 200:
-     * description: Liste des outils récupérée avec succès
-     * content:
-     * application/json:
-     * schema:
-     * type: array
-     * items:
-     * $ref: '#/components/schemas/Tool'
-     * 500:
-     * description: Erreur serveur
+     *   get:
+     *     summary: Récupère tous les outils
+     *     description: Retourne la liste de tous les outils, avec possibilité de filtrer par département
+     *     tags: [Tools]
+     *     parameters:
+     *       - in: query
+     *         name: department
+     *         schema:
+     *           type: string
+     *         description: Filtrer par département (optionnel)
+     *         example: "IT"
+     *     responses:
+     *       200:
+     *         description: Liste des outils récupérée avec succès
+     *         content:
+     *           application/json:
+     *             schema:
+     *               type: array
+     *               items:
+     *                 $ref: '#/components/schemas/Tool'
+     *       500:
+     *         description: Erreur serveur
      */
     getAll = async (req: Request, res: Response) => {
         try {
-            // On récupère le paramêtre dans l'URL
+            // On récupère le paramètre dans l'URL
             const { department, status, min_cost, max_cost, page = 1, limit = 10 } = req.query;
 
             // la boite à filtre (vide si pas de filtre)
@@ -157,28 +157,28 @@ export class ToolController {
     /**
      * @swagger
      * /api/tools/{id}:
-     * get:
-     * summary: Récupère un outil par son ID
-     * description: Retourne les détails d'un outil spécifique
-     * tags: [Tools]
-     * parameters:
-     * - in: path
-     * name: id
-     * required: true
-     * schema:
-     * type: integer
-     * description: ID de l'outil
-     * responses:
-     * 200:
-     * description: Outil trouvé
-     * content:
-     * application/json:
-     * schema:
-     * $ref: '#/components/schemas/Tool'
-     * 404:
-     * description: Outil non trouvé
-     * 500:
-     * description: Erreur serveur
+     *   get:
+     *     summary: Récupère un outil par son ID
+     *     description: Retourne les détails d'un outil spécifique
+     *     tags: [Tools]
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         required: true
+     *         schema:
+     *           type: integer
+     *         description: ID de l'outil
+     *     responses:
+     *       200:
+     *         description: Outil trouvé
+     *         content:
+     *           application/json:
+     *             schema:
+     *               $ref: '#/components/schemas/Tool'
+     *       404:
+     *         description: Outil non trouvé
+     *       500:
+     *         description: Erreur serveur
      */
     getOne = async (req: Request, res: Response) => {
         try {
@@ -212,41 +212,41 @@ export class ToolController {
         }
     };
 
-/**
+    /**
      * @swagger
      * /api/tools:
-     * post:
-     * summary: Crée un nouvel outil
-     * tags: [Tools]
-     * requestBody:
-     * required: true
-     * content:
-     * application/json:
-     * schema:
-     * type: object
-     * required:
-     * - name
-     * - category_id
-     * - monthly_cost
-     * - owner_department
-     * properties:
-     * name:
-     * type: string
-     * description:
-     * type: string
-     * vendor:
-     * type: string
-     * website_url:
-     * type: string
-     * category_id:
-     * type: integer
-     * monthly_cost:
-     * type: number
-     * owner_department:
-     * type: string
-     * responses:
-     * 201:
-     * description: Créé
+     *   post:
+     *     summary: Crée un nouvel outil
+     *     tags: [Tools]
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             required:
+     *               - name
+     *               - category_id
+     *               - monthly_cost
+     *               - owner_department
+     *             properties:
+     *               name:
+     *                 type: string
+     *               description:
+     *                 type: string
+     *               vendor:
+     *                 type: string
+     *               website_url:
+     *                 type: string
+     *               category_id:
+     *                 type: integer
+     *               monthly_cost:
+     *                 type: number
+     *               owner_department:
+     *                 type: string
+     *     responses:
+     *       201:
+     *         description: Créé
      */
     create = async (req: Request, res: Response) => {
         try {
@@ -299,54 +299,54 @@ export class ToolController {
     /**
      * @swagger
      * /api/tools/{id}:
-     * put:
-     * summary: Met à jour un outil
-     * description: Modifie les informations d'un outil existant
-     * tags: [Tools]
-     * parameters:
-     * - in: path
-     * name: id
-     * required: true
-     * schema:
-     * type: integer
-     * description: ID de l'outil à modifier
-     * requestBody:
-     * required: true
-     * content:
-     * application/json:
-     * schema:
-     * type: object
-     * properties:
-     * name:
-     * type: string
-     * description:
-     * type: string
-     * vendor:
-     * type: string
-     * websiteUrl:
-     * type: string
-     * categoryId:
-     * type: integer
-     * monthlyCost:
-     * type: number
-     * activeUsersCount:
-     * type: integer
-     * ownerDepartment:
-     * type: string
-     * status:
-     * type: string
-     * enum: [active, deprecated, trial]
-     * example:
-     * name: "Slack Pro"
-     * monthlyCost: 250.00
-     * activeUsersCount: 75
-     * responses:
-     * 200:
-     * description: Outil mis à jour avec succès
-     * 404:
-     * description: Outil non trouvé
-     * 500:
-     * description: Impossible de mettre à jour l'outil
+     *   put:
+     *     summary: Met à jour un outil
+     *     description: Modifie les informations d'un outil existant
+     *     tags: [Tools]
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         required: true
+     *         schema:
+     *           type: integer
+     *         description: ID de l'outil à modifier
+     *     requestBody:
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             type: object
+     *             properties:
+     *               name:
+     *                 type: string
+     *               description:
+     *                 type: string
+     *               vendor:
+     *                 type: string
+     *               websiteUrl:
+     *                 type: string
+     *               categoryId:
+     *                 type: integer
+     *               monthlyCost:
+     *                 type: number
+     *               activeUsersCount:
+     *                 type: integer
+     *               ownerDepartment:
+     *                 type: string
+     *               status:
+     *                 type: string
+     *                 enum: [active, deprecated, trial]
+     *           example:
+     *             name: "Slack Pro"
+     *             monthlyCost: 250.00
+     *             activeUsersCount: 75
+     *     responses:
+     *       200:
+     *         description: Outil mis à jour avec succès
+     *       404:
+     *         description: Outil non trouvé
+     *       500:
+     *         description: Impossible de mettre à jour l'outil
      */
     update = async (req: Request, res: Response) => {
         try {
@@ -380,24 +380,24 @@ export class ToolController {
     /**
      * @swagger
      * /api/tools/{id}:
-     * delete:
-     * summary: Supprime un outil
-     * description: Supprime un outil de la base de données
-     * tags: [Tools]
-     * parameters:
-     * - in: path
-     * name: id
-     * required: true
-     * schema:
-     * type: integer
-     * description: ID de l'outil à supprimer
-     * responses:
-     * 204:
-     * description: Outil supprimé avec succès
-     * 404:
-     * description: Outil non trouvé
-     * 500:
-     * description: Impossible de supprimer l'outil
+     *   delete:
+     *     summary: Supprime un outil
+     *     description: Supprime un outil de la base de données
+     *     tags: [Tools]
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         required: true
+     *         schema:
+     *           type: integer
+     *         description: ID de l'outil à supprimer
+     *     responses:
+     *       204:
+     *         description: Outil supprimé avec succès
+     *       404:
+     *         description: Outil non trouvé
+     *       500:
+     *         description: Impossible de supprimer l'outil
      */
     delete = async (req: Request, res: Response) => {
         try {

@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { AppDataSource } from '../data-source';
-import app from '../../server';
+import app from '../server';
 
 /**
  * Suite de tests d'intégration pour l'API Tools.

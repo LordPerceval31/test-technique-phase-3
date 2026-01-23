@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { Tool } from "./entity/Tool"; 
 import dotenv from "dotenv";
+import { Category } from "./entity/Category";
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
     database: process.env.MYSQL_DATABASE,
     synchronize: false,
     logging: true,
-    entities: [Tool],
+    entities: [Tool, Category],
     subscribers: [],
     migrations: [],
 });

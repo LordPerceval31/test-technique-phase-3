@@ -1,11 +1,11 @@
 import "reflect-metadata";
 import dotenv from 'dotenv';
 import express from 'express';
-import { AppDataSource } from "./src/data-source";
-import { ToolController } from "./src/controllers/toolController";
+import { AppDataSource } from "./data-source";
+import { ToolController } from "./controllers/toolController";
 import swaggerUi from 'swagger-ui-express';
-import { swaggerSpec } from './src/swagger';
-import { AnalyticController } from "./src/controllers/analyticController";
+import { swaggerSpec } from './swagger';
+import { AnalyticController } from "./controllers/analyticController";
 
 dotenv.config();
 
@@ -29,9 +29,10 @@ app.get('/api/tools', toolController.getAll)
 app.get('/api/tools/:id', toolController.getOne)
 // Route pour afficher les coûts des départements
 app.get('/api/analytics/department-costs', analyticController.getDepartmentCosts);
-
 // Route pour identifie les outils les plus chers par utilisateur et calculer les économies potentielles
 app.get('/api/analytics/expensive-tools', analyticController.getExpensiveTools)
+// Route pour afficher les outils par leur catégorie
+app.get('/api/analytics/tools-by-category', analyticController.getToolsByCategory)
 
 // Route pour créer un nouvel outil
 app.post('/api/tools', toolController.create)

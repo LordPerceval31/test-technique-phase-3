@@ -1,6 +1,6 @@
 import request from 'supertest';
 import { AppDataSource } from '../data-source';
-import app from '../../server';
+import app from '../server';
 
 describe('Analytics E2E Tests', () => {
     // Avant les tests, on s'assure que la BDD est connectée
@@ -79,6 +79,60 @@ describe('Analytics E2E Tests', () => {
 
             expect(response.status).toBe(200);
             expect(response.body.data.length).toBe(0); // On doit avoir une liste vide
+        });
+    });
+
+    describe('GET /api/analytics/tools-by-category', () => {
+        
+        it('should return 200 and the correct structure with insights', async () => {
+            const response = await request(app).get('/api/analytics/tools-by-category');
+
+            expect(response.status).toBe(200);
+            
+            // Vérifie la structure globale
+            expect(response.body).toHaveProperty('data');
+            expect(response.body).toHaveProperty('insights');
+
+            // Vérifie les Insights
+            expect(response.body.insights).toHaveProperty('most_expensive_category');
+            expect(response.body.insights).toHaveProperty('most_efficient_category');
+            expect(typeof response.body.insights.most_expensive_category).toBe('string');
+
+            // Vérifie le contenu d'une ligne de data (s'il y en a)
+            if (response.body.data.length > 0) {
+                const category = response.body.data[0];
+                expect(category).toHaveProperty('category_name');
+                expect(category).toHaveProperty('total_cost');
+                expect(category).toHaveProperty('average_cost_per_user');
+                expect(typeof category.percentage_of_budget).toBe('number');
+            }
+        });
+
+        it('should sort by category name when requested', async () => {
+            // On demande un tri par Nom en ordre Croissant (A-Z)
+            const response = await request(app)
+                .get('/api/analytics/tools-by-category')
+                .query({ sortBy: 'name', order: 'ASC' });
+
+            const data = response.body.data;
+
+            // Si on a au moins 2 catégories, on vérifie que la première est "plus petite" (alphabétiquement) que la seconde
+            if (data.length >= 2) {
+                const first = data[0].category_name;
+                const second = data[1].category_name;
+                
+                // localeCompare renvoie -1 si first est avant second dans l'alphabet
+                expect(first.localeCompare(second)).toBeLessThanOrEqual(0);
+            }
+        });
+
+        it('should return valid percentages (0-100)', async () => {
+            const response = await request(app).get('/api/analytics/tools-by-category');
+            
+            response.body.data.forEach((cat: any) => {
+                expect(cat.percentage_of_budget).toBeGreaterThanOrEqual(0);
+                expect(cat.percentage_of_budget).toBeLessThanOrEqual(100);
+            });
         });
     });
 });

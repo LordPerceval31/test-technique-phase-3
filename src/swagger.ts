@@ -1,4 +1,5 @@
 import swaggerJsdoc from 'swagger-jsdoc';
+import path from 'path';
 
 const options = {
   definition: {
@@ -15,7 +16,14 @@ const options = {
       },
     ],
   },
-  apis: ['./src/controllers/*.ts', './server.ts'], 
+  apis: [
+    path.join(__dirname, './controllers/*.ts'),
+    path.join(__dirname, './server.ts')
+  ]
 };
 
-export const swaggerSpec = swaggerJsdoc(options);
+export const swaggerSpec = swaggerJsdoc(options) as any;
+
+// DEBUG : Affiche ce que Swagger a trouvé
+console.log('🔍 Swagger paths détectés:', Object.keys(swaggerSpec.paths || {}));
+console.log('🔍 Swagger schemas détectés:', Object.keys(swaggerSpec.components?.schemas || {}));

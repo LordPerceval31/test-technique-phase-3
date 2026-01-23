@@ -164,4 +164,95 @@ export class AnalyticService {
             }
         };
     }
+
+    async getToolsByCategory(sortBy: string = 'total_cost', order: 'ASC' | 'DESC' = 'DESC') {
+
+        // On récupère tous les coût des outils de l'entreprise avec le status actif
+        const Stats = await this.analyticRepository
+            .createQueryBuilder("tool")
+            .select("SUM(tool.monthly_cost)", "total")
+            .where("tool.status = :status", { status: 'active' })
+            .getRawOne();
+
+        
+        const totalCompanyCost = parseFloat(Stats?.total) || 0;
+
+        const query = this.analyticRepository
+            .createQueryBuilder("tool")
+            // On join la table catégorie
+            .innerJoin("tool.category", "cat")
+            .select("cat.name", "category_name")
+            .addSelect("COUNT(tool.id)", "tools_count")
+            .addSelect("SUM(tool.monthly_cost)", "total_cost")
+            .addSelect("SUM(tool.active_users_count)", "total_users")
+            .where("tool.status = :status", { status: 'active' })
+            .groupBy("cat.name")
+             
+            if (sortBy === 'total_cost') {
+                // Si égalité de coût : ordre alphabétique de la catégorie
+                query.orderBy("total_cost", order).addOrderBy("cat.name", "ASC");
+            } else {
+                // Tri par défaut sur le nom de la catégorie
+                query.orderBy("cat.name", order);
+            }
+
+        const results = await query.getRawMany();
+
+        const data = results.map(category => {
+
+            // On met les valeurs en number
+            const totalCost = parseFloat(category.total_cost);
+            const toolsCount = parseInt(category.tools_count);
+            const totalUsers = parseInt(category.total_users);
+
+            // Calcul du coût par catégorie
+            const costPercentage = totalCompanyCost > 0 ? 
+            Math.round((totalCost / totalCompanyCost * 100) * 10) / 10 
+            : 0
+
+            // Calcul du coût moyen par utilisateur
+            const avgCostPerUser = totalUsers > 0 ?
+            Math.round((totalCost / totalUsers) * 100) / 100
+            : 0
+
+        return {
+                category_name: category.category_name,
+                tools_count: toolsCount,
+                total_cost: Math.round(totalCost * 100) / 100,
+                total_users: totalUsers,
+                percentage_of_budget: costPercentage,
+                average_cost_per_user: avgCostPerUser
+            };
+        })
+
+        // La catégory la plus chère
+        const maxCost = Math.max(...data.map(d => d.total_cost));
+        const expensiveTool = data.find(d => d.total_cost === maxCost);
+        const mostExpensive = expensiveTool ? expensiveTool.category_name : "N/A";
+
+        // On filtre pour garder uniquement les catégories ayant des utilisateurs actifs
+        const categoryHasUsers = data.filter(t => t.total_users > 0)
+
+        const efficientList = categoryHasUsers.sort((a, b) => {
+            // Si les valeurs moyennes sont identiques
+            if (a.average_cost_per_user === b.average_cost_per_user) {
+            
+            // On tri par ordre alphabétique
+            return a.category_name.localeCompare(b.category_name);
+            }
+            // Sinon, trier par prix croissant
+            return a.average_cost_per_user - b.average_cost_per_user;
+        });
+
+        // Le plus rentable (le moins cher par utilisateur)
+        const mostEfficient = efficientList.length > 0 ? efficientList[0].category_name : "N/A";
+
+        return {
+            data: data,
+            insights: {
+                most_expensive_category: mostExpensive,
+                most_efficient_category: mostEfficient,
+            }
+        }
+    }
 }
