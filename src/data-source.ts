@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { Tool } from "./entities/Tool"; 
+import { Tool } from "./entity/Tool"; 
 import dotenv from "dotenv";
 
 dotenv.config();

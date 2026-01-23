@@ -5,6 +5,7 @@ import { AppDataSource } from "./src/data-source";
 import { ToolController } from "./src/controllers/toolController";
 import swaggerUi from 'swagger-ui-express';
 import { swaggerSpec } from './src/swagger';
+import { AnalyticController } from "./src/controllers/analyticController";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 const toolController = new ToolController();
+const analyticController = new AnalyticController();
 
 // Route de test
 app.get('/', (req, res) => {
@@ -25,6 +27,8 @@ app.get('/', (req, res) => {
 app.get('/api/tools', toolController.getAll)
 // Route pour récupérer un outil en particulier
 app.get('/api/tools/:id', toolController.getOne)
+// Route pour afficher les coûts des départements
+app.get('/api/analytics/department-costs', analyticController.getDepartmentCosts);
 
 // Route pour créer un nouvel outil
 app.post('/api/tools', toolController.create)
@@ -34,7 +38,6 @@ app.delete('/api/tools/:id', toolController.delete)
 
 // Route pour mettre à jour un outil
 app.put('/api/tools/:id', toolController.update)
-
 
 // Route de la documentation Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

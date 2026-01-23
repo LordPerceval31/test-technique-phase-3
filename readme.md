@@ -89,9 +89,12 @@ Note : Lance les tests unitaires (Jest) et les tests d'intégration.
 ├── src
 │   ├── controllers    # Logique métier et validation des entrées (Business Logic)
 │   ├── entity         # Modèles de données TypeORM (Data Layer)
+│   ├── tests          # Logique métier et services de traitement de données.
+│   ├── services       # Tests End 2 End
 │   ├── swagger.ts     # Configuration de la documentation API
-│   ├── data-source.ts # Configuration de la connexion MySQL
-│   └── server.ts      # Point d'entrée et configuration Express
+│   └── data-source.ts # Configuration de la connexion MySQL
+│
 ├── init.sql           # Script d'initialisation et de seeding de la BDD
 ├── docker-compose.yml # Orchestration des conteneurs (API + MySQL + PhpMyAdmin)
-└── package.json       # Dépendances et scripts
+├── package.json       # Dépendances et scripts
+└── server.ts          # Point d'entrée et configuration Express

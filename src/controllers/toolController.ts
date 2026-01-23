@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Between, FindOptionsWhere } from "typeorm";
 import { AppDataSource } from "../data-source";
-import { Tool } from "../entities/Tool";
+import { Tool } from "../entity/Tool";
 
 /**
  * @swagger

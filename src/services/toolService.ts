@@ -1,5 +1,5 @@
 import { AppDataSource } from "../data-source";
-import { Tool } from "../entities/Tool";
+import { Tool } from "../entity/Tool";
 
 
 export class ToolService {
