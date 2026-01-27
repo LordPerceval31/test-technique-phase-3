@@ -1,43 +1,48 @@
-import { Sun, Moon } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import darkWallpaper from './assets/darkWallpaper.webp'; 
+import Navbar from "./components/header";
+import Dashboard from "./pages/dashboard";
 
 function App() {
-  // On peut initialiser avec la préférence système si on veut être proactif
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
-    const root = document.documentElement;
+    
     if (isDark) {
-      root.classList.add('dark');
-      // Astuce : on change aussi le style du body pour éviter les flashs blancs au scroll
-      document.body.style.backgroundColor = '#09090b'; 
+      document.documentElement.classList.add('dark');
     } else {
-      root.classList.remove('dark');
-      document.body.style.backgroundColor = '#ffffff';
+      document.documentElement.classList.remove('dark');
     }
   }, [isDark]);
 
   return (
-    /* J'ai retiré le commentaire pour la clarté */
-    <div className="min-h-screen grid place-items-center bg-white dark:bg-[#09090b] transition-colors duration-500 text-black dark:text-white">
+    <div className="relative min-h-screen overflow-x-hidden">
       
-      <div className="p-10 rounded-3xl bg-gray-100 dark:bg-[#121214] border border-gray-200 dark:border-white/5 shadow-2xl text-center transition-colors duration-500">
-        
-        <h1 className="text-4xl font-black tracking-tight mb-2">
-          TechCorp <span className="text-purple-500">v4</span>
-        </h1>
-        
-        <p className="text-gray-500 dark:text-gray-400 mb-8 max-w-xs mx-auto">
-          Maintenant que App.css est vide, le fond couvre tout l'écran !
-        </p>
+      {/* Fond Light (Blanc) */}
+      <div className="fixed inset-0 bg-white z-0" />
 
-        <button 
-          onClick={() => setIsDark(!isDark)}
-          className="cursor-pointer mx-auto flex items-center gap-3 px-8 py-4 bg-black dark:bg-white text-white dark:text-black rounded-full font-bold transition-all active:scale-95 hover:opacity-90"
-        >
-          {isDark ? <Sun size={20} /> : <Moon size={20} />}
-          {isDark ? 'Mode Clair' : 'Mode Sombre'}
-        </button>
+      {/* Fond Dark (Image Wallpaper) */}
+      <div 
+        className={`fixed inset-0 bg-cover bg-center z-0 transition-opacity duration-300 ${
+          isDark ? 'opacity-100' : 'opacity-0'
+        }`}
+        style={{ backgroundImage: `url(${darkWallpaper})` }}
+      />
+      
+      <div className="relative z-10 flex flex-col min-h-screen text-black dark:text-white">
+        
+        <Navbar 
+          isDark={isDark} 
+          toggleTheme={() => {
+            // LOG 3 : Vérifie si le clic depuis la Navbar remonte bien jusqu'ici
+            console.log("%c [App.tsx] Action toggleTheme reçue !", "color: #22c55e; font-weight: bold");
+            setIsDark(!isDark);
+          }} 
+        />
+
+        <main className="flex-1">
+          <Dashboard isDark={isDark}/>
+        </main>
 
       </div>
     </div>
