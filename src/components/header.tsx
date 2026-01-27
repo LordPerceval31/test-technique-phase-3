@@ -23,7 +23,7 @@ const NAV_LINKS = [
   { title: "Settings", href: "#" },
 ];
 
-export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
+const Navbar = ({ isDark, toggleTheme }: NavbarProps) => {
   const [openNav, setOpenNav] = React.useState(false);
 
   React.useEffect(() => {
@@ -44,7 +44,7 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-blue-600 to-purple-600 text-white shadow-md">
-                <Zap size={18} fill="currentColor" />
+                <Zap size={18}/>
               </div>
               <a href="#" className="block py-1 text-lg font-bold text-gray-900 dark:text-white tracking-tight cursor-default">
                 TechCorp
@@ -141,3 +141,5 @@ export default function Navbar({ isDark, toggleTheme }: NavbarProps) {
     </header>
   );
 }
+
+export default Navbar
