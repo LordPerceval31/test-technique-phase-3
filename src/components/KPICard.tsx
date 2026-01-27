@@ -7,6 +7,7 @@ interface KPICardProps {
   trend: string;
   icon: LucideIcon;
   color: "blue" | "green" | "orange" | "pink";
+  progress?: number,
 }
 
 export default function KPICard({ 
@@ -15,7 +16,8 @@ export default function KPICard({
   subValue,
   trend, 
   icon: Icon, 
-  color 
+  color,
+  progress
 }: KPICardProps) {
   
   const gradients = {
@@ -26,8 +28,8 @@ export default function KPICard({
   };
 
   return (
-    <div className="@container relative h-full w-full p-10 justify-between sm:p-6 sm:gap-0 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#0A0A0A] shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
-      <div className={`absolute rounded-lg text-white shadow-lg ${gradients[color]} top-10 right-10 p-3 sm:top-6 sm:right-6 sm:p-2.5
+    <div className="@container relative h-full w-full p-10 justify-between sm:p-6 sm:gap-0 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-black shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
+      <div className={`absolute rounded-lg text-white ${gradients[color]} top-10 right-10 p-3 sm:top-6 sm:right-6 sm:p-2.5
       `}>
         <Icon size={20} />
       </div>
@@ -49,13 +51,27 @@ export default function KPICard({
           )}
         </div>
         
-        <div className="mt-3 flex items-center gap-4">
-          <span className={`font-bold px-2 py-0.5 rounded-full whitespace-nowrap text-[clamp(10px,4cqw,12px)] text-white ${gradients[color]}`}>
-            {trend}
-          </span>
-        </div>
-      </div>
+        <div className="mt-4">
+         {/* 3. LOGIQUE D'AFFICHAGE : Soit la barre, soit le badge, soit les deux */}
+         
+         {/* Le Badge de trend (+12%) est toujours là */}
+         <div className="flex items-center gap-2 mb-2">
+            <span className={`font-bold px-2 py-0.5 rounded-full whitespace-nowrap text-xs text-white ${gradients[color]}`}>
+                {trend}
+            </span>
+         </div>
 
+         {/* La Barre de progression (Uniquement si demandée) */}
+         {progress !== undefined && (
+            <div className="w-full bg-gray-100 dark:bg-white/5 rounded-full h-1.5 mt-3 overflow-hidden">
+                <div 
+                    className={`h-full rounded-full ${gradients[color]} transition-all duration-500`} 
+                    style={{ width: `${progress}%` }}
+                ></div>
+            </div>
+         )}
+      </div>
+          </div>
     </div>
   );
 }

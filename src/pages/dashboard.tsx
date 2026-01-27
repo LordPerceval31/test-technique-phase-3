@@ -1,5 +1,6 @@
 import KPICard from "../components/KPICard";
 import { Building2, Users, Wrench, TrendingUp } from "lucide-react";
+import RecentTools from "../components/recentTools";
 
 
 interface DashboardProps {
@@ -39,6 +40,7 @@ const Dashboard = ({ isDark }: DashboardProps) => {
       trend="+12%"
       icon={TrendingUp}
       color="green"
+      progress={96}
     />
   </div>
 
@@ -71,7 +73,8 @@ const Dashboard = ({ isDark }: DashboardProps) => {
   </div>
       </section>
 
-      <section className="bg-green-500/20 mt-8 mb-8 rounded-xl flex-1 w-full flex items-center justify-center border border-green-500/30 min-h-250 lg:min-h-0">
+      <section className="mt-8 mb-8 flex-1 w-full min-h-250 lg:min-h-0 flex flex-col">
+          <RecentTools />
       </section>
 
     </main>

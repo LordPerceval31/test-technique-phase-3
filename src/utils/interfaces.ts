@@ -1,0 +1,45 @@
+
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  department_id: number;
+  role: string;
+  active: boolean;
+  joined_at: string;
+}
+
+export interface Department {
+    id: number,
+    name: string,
+    description: string,
+    created_at: string,
+    updated_at: string,
+}
+
+export interface UserTools {
+    user_id: number,
+    tool_id: number,
+    usage_frequency: string,
+    last_used: string,
+    proficiency_level: string,
+}
+
+
+export interface Tool {
+  id: number;
+  name: string;
+  description: string;
+  vendor: string;
+  category: string;
+  monthly_cost: number;
+  previous_month_cost: number;
+  owner_department: string;
+  status: "active" | "expiring" | "unused";
+  website_url: string;
+  active_users_count: number;
+  icon_url: string;
+  created_at: string;
+  updated_at: string;
+}
