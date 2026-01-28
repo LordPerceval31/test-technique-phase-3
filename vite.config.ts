@@ -8,6 +8,15 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://tt-jsonserver-01.alt-tools.tech',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',
