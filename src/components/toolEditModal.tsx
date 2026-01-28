@@ -34,7 +34,7 @@ const INITIAL_FORM_STATE: NewToolPayload = {
   icon_url: ""
 };
 
-export default function ToolModal({ isOpen, onClose, onSubmit, initialData, isDark }: ToolModalProps) {
+export default function ToolEditModal({ isOpen, onClose, onSubmit, initialData, isDark }: ToolModalProps) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<NewToolPayload>(INITIAL_FORM_STATE);
 

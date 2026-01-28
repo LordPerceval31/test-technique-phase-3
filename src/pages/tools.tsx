@@ -6,7 +6,8 @@ import ToolFilters from "../components/toolFilter";
 import RecentTools from "../components/recentTools";
 import { useMemo, useState, useEffect } from "react";
 import ToolCard from "../components/toolCard";
-import ToolModal from "../components/toolModal";
+import ToolEditModal from "../components/toolEditModal";
+import ToolViewModal from "../components/toolViewModal";
 
 interface ToolsProps {
   isDark: boolean;
@@ -20,10 +21,12 @@ const Tools: React.FC<ToolsProps> = ({ isDark }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Etat de la modale
+  // Etat des modales
   // Gestion de l'ouverture/fermeture et de l'outil en cours d'édition
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTool, setEditingTool] = useState<Tool | null>(null);
+  const [viewingTool, setViewingTool] = useState<Tool | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   // Etat des filtres
   // Critères pour trier et filtrer la liste affichée
@@ -100,6 +103,12 @@ const Tools: React.FC<ToolsProps> = ({ isDark }) => {
     setEditingTool(tool);
     setIsModalOpen(true);
   };
+
+  // Ouvre la modale en mode view
+  const openViewModal = (tool: Tool) => {
+    setViewingTool(tool);
+    setIsViewModalOpen(true);
+};
 
   // Utilisation de useMemo pour ne recalculer que si les données ou filtres changent
   const filteredTools: Tool[] = useMemo(() => {
@@ -181,6 +190,7 @@ const Tools: React.FC<ToolsProps> = ({ isDark }) => {
               onEdit={openEditModal} 
               onDelete={handleDelete}
               onToggleStatus={handleToggleStatus}
+              onView={openViewModal}
             />
           ))}
         </div>
@@ -191,13 +201,20 @@ const Tools: React.FC<ToolsProps> = ({ isDark }) => {
       )}
 
       {/* La modale d'édition ou de création */}
-      <ToolModal 
+      <ToolEditModal 
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSubmit={editingTool ? handleUpdate : handleCreate}
         initialData={editingTool}
         isDark={isDark}
       />
+      {/* La modale pour voir un outil */}
+      <ToolViewModal 
+        isOpen={isViewModalOpen}
+        onClose={() => setIsViewModalOpen(false)}
+        tool={viewingTool}
+        isDark={isDark}
+    />
     </main>
   );
 };

@@ -1,6 +1,8 @@
-import * as React from "react";
+
 import { Users, ExternalLink, MoreVertical, Edit, Trash2, Power, Play, Calendar } from "lucide-react";
 import type { Tool } from "../utils/interfaces";
+import { getStatusStyles } from "../styles/statusColors";
+import { useEffect, useRef, useState } from "react";
 
 interface ToolCardProps {
   tool: Tool;
@@ -8,13 +10,14 @@ interface ToolCardProps {
   onEdit: (tool: Tool) => void;
   onDelete: (id: number) => void;
   onToggleStatus: (tool: Tool) => void;
+  onView: (tool: Tool) => void;
 }
 
-export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatus }: ToolCardProps) {
-  const [showMenu, setShowMenu] = React.useState(false);
-  const menuRef = React.useRef<HTMLDivElement>(null);
+export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatus, onView }: ToolCardProps) {
+  const [showMenu, setShowMenu] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setShowMenu(false);
@@ -23,15 +26,6 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
-  const getStatusGradient = (status: Tool["status"]) => {
-    switch (status) {
-      case "active": return "from-green-500 to-emerald-800 shadow-emerald-500/20";
-      case "expiring": return "from-orange-400 to-red-800 shadow-orange-500/20";
-      case "unused": return "from-red-500 to-red-800 shadow-red-500/20";
-      default: return "from-gray-400 to-gray-600";
-    }
-  };
 
   const isInactive = tool.status === "unused";
   const toggleLabel = isInactive ? "Enable" : "Disable";
@@ -48,10 +42,13 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
 
   return (
     <div className="aspect-video w-full"> 
-      <div className={`relative h-full w-full flex flex-col justify-between rounded-xl border transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1.5 cursor-default group/card 
+      <div 
+        // 1. CLICK SUR LA CARTE = VIEW
+        onClick={() => onView(tool)}
+        className={`relative h-full w-full flex flex-col justify-between rounded-xl border transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1.5 cursor-pointer group/card 
         ${isDark ? "bg-black border-white/10 hover:shadow-blue-500/10" : "bg-white border-gray-200 hover:shadow-gray-200/50"}
-        p-4 sm:p-5 md:p-6`
-      }>
+        p-4 sm:p-5 md:p-6`}
+      >
       
         <div className="flex justify-between items-start">
             <div className="p-2 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5 shrink-0">
@@ -65,7 +62,10 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
             
             <div className="relative" ref={menuRef}>
                 <button 
-                    onClick={() => setShowMenu(!showMenu)}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setShowMenu(!showMenu)
+                      }}
                     className="p-1.5 rounded-md text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
                 >
                     <MoreVertical size={18} />
@@ -73,17 +73,23 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
 
                 {showMenu && (
                     <div className="absolute right-0 mt-1 w-36 bg-white dark:bg-[#121214] border border-gray-200 dark:border-white/10 rounded-lg shadow-lg z-20 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
-                        <button onClick={() => { onEdit(tool); setShowMenu(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 cursor-pointer">
+                        <button onClick={(e) => {
+                           e.stopPropagation()
+                           onEdit(tool); setShowMenu(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 cursor-pointer">
                             <Edit size={14} /> Edit
                         </button>
                          <button 
-                            onClick={() => { onToggleStatus(tool); setShowMenu(false); }} 
+                            onClick={(e) => { 
+                              e.stopPropagation()
+                              onToggleStatus(tool); setShowMenu(false); }} 
                             className={`w-full flex items-center gap-2 px-3 py-2 text-xs font-medium hover:bg-gray-50 dark:hover:bg-white/5 cursor-pointer ${isInactive ? "text-green-600" : "text-gray-700 dark:text-gray-300"}`}
                          >
                             <ToggleIcon size={14} /> {toggleLabel}
                         </button>
                         <div className="border-t border-gray-100 dark:border-white/5 my-1"></div>
-                        <button onClick={() => { onDelete(tool.id); setShowMenu(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 cursor-pointer">
+                        <button onClick={(e) => { 
+                          e.stopPropagation()
+                          onDelete(tool.id); setShowMenu(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 cursor-pointer">
                             <Trash2 size={14} /> Delete
                         </button>
                     </div>
@@ -111,7 +117,7 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
             
           <div className="flex items-center justify-between">
              <div className="flex items-center gap-2">
-                <span className={`px-2 py-0.5 rounded-full font-bold uppercase tracking-wider text-white bg-linear-to-br text-[9px] sm:text-[10px] ${getStatusGradient(tool.status)}`}>
+                <span className={`px-2 py-0.5 rounded-full font-bold uppercase tracking-wider text-white bg-linear-to-br text-[9px] sm:text-[10px] ${getStatusStyles(tool.status)}`}>
                     {tool.status}
                 </span>
                  <div className="flex items-center gap-1 text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs">
@@ -120,7 +126,11 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
                 </div>
             </div>
 
-            <a href={tool.website_url} target="_blank" rel="noopener noreferrer" className="p-1.5 rounded-lg bg-gray-50 dark:bg-white/5 text-gray-400 hover:text-blue-500 hover:bg-blue-500/10 transition-all">
+            <a href={tool.website_url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                onClick={(e) => e.stopPropagation()}
+                className="p-1.5 rounded-lg bg-gray-50 dark:bg-white/5 text-gray-400 hover:text-blue-500 hover:bg-blue-500/10 transition-all">
                 <ExternalLink size={14} />
             </a>
           </div>
