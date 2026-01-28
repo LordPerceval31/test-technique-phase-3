@@ -1,73 +1,59 @@
-# React + TypeScript + Vite
+🚀 TechCorp Dashboard - Jour 6 (Foundation)
+Bienvenue dans le cockpit de gestion des outils internes de TechCorp. Cette application permet de monitorer les dépenses SaaS, l'utilisation des outils par département et l'optimisation des coûts.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+🏗️ Architecture du Projet
+L'application est construite avec une approche modulaire et typée :
 
-Currently, two official plugins are available:
+Vite + React + TS : Pour un environnement de développement ultra-rapide et sécurisé.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Tailwind CSS v4 : Utilisation des nouvelles capacités de styling pour un design "Pixel Perfect".
 
-## React Compiler
+Vitest & React Testing Library : Suite de tests unitaires garantissant la robustesse des composants critiques.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+🎨 Design System Evolution
+Pendant ce Jour 6, nous avons établi les bases visuelles :
 
-## Expanding the ESLint configuration
+Mode Sombre/Clair : Un système de thémisation complet utilisant les classes dark de Tailwind et le localStorage.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Composants KPI : Des cartes dynamiques avec des dégradés subtils et des barres de progression calculées selon l'utilisation du budget.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Tableau de Données : Une interface interactive gérant le tri par colonnes et la pagination.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+🔗 Navigation & User Journey
+Dashboard (/) : Vue d'ensemble des KPIs et des derniers outils ajoutés.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Pagination : Navigation fluide à travers les listes d'outils (limite de 10 par page).
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Toggle Theme : Passage instantané d'une ambiance de travail sombre à claire via le Header.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+🧪 Stratégie de Test
+Nous avons implémenté des tests unitaires pour chaque brique majeure :
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+KPICard.test.tsx : Validation du rendu des metrics et de la logique conditionnelle de la barre de progression.
+
+RecentTools.test.tsx : Test des fonctionnalités de tri (logiciel) et de la pagination via data-testid.
+
+Header.test.tsx : Vérification du bon fonctionnement du bouton de changement de thème.
+
+🚀 Quick Start
+Installation :
+
+Bash
+
+npm install
+Lancer le développement :
+
+Bash
+
+npm run dev
+Lancer la suite de tests :
+
+Bash
+
+npm test
+📊 État d'avancement
+[x] Jour 6 : Dashboard Foundation (Terminé)
+
+[ ] Jour 7 : Tools Catalog & Filtres Avancés (À venir)
+
+[ ] Jour 8 : Analytics & Data Viz (À venir)

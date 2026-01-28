@@ -97,7 +97,7 @@ const Navbar = ({ isDark, toggleTheme }: NavbarProps) => {
               <Search size={20} className="text-gray-600 dark:text-gray-300" />
             </button>
 
-            <button onClick={toggleTheme} className="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full transition-colors cursor-pointer">
+            <button data-testid="theme-toggle" onClick={toggleTheme} className="p-2 hover:bg-gray-100 dark:hover:bg-white/5 rounded-full transition-colors cursor-pointer">
               {isDark ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-gray-600" />}
             </button>
 

@@ -19,43 +19,58 @@ const getStatusStyles = (status: Tool["status"]) => {
 };
 
 const RecentTools = () => {
-  const [sortConfig, setSortConfig] = useState<{ key: keyof Tool; direction: "asc" | "desc" } | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
+  // Gère l'état du tri (quelle colonne et quelle direction)
+  const [sortConfig, setSortConfig] = useState<{ key: keyof Tool; direction: "asc" | "desc" } | null>(null); // il peut être null parce on n'en défini pas par défaut
+  const [currentPage, setCurrentPage] = useState(1); // On commence à la page 1
 
+  // Fonction pour changer la configuration de tri
   const handleSort = (key: keyof Tool) => {
     let direction: "asc" | "desc" = "asc";
+    // Si on clique sur la même colonne, on change de sens
     if (sortConfig && sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
     }
+    // On sauvegarde la nouvelle configuration
     setSortConfig({ key, direction });
     setCurrentPage(1);
   };
 
+  // Fonction pour trier le nouveau tableau d'outils
   const sortedTools = [...RECENT_TOOLS].sort((a: Tool, b: Tool) => {
     if (!sortConfig) return 0;
     
+    // Le mot clé
     const sortKey = sortConfig.key as keyof Tool;
+    // La direction (ASC ou DESC)
     const direction = sortConfig.direction;
 
     const valueA = a[sortKey];
     const valueB = b[sortKey];
 
+    // Comparaison pour les chaînes de caractères
     if (typeof valueA === "string" && typeof valueB === "string") {
       return direction === "asc"
         ? valueA.localeCompare(valueB)
         : valueB.localeCompare(valueA);
     }
 
+    // Comparaison pour les nombres
     if (valueA < valueB) return direction === "asc" ? -1 : 1;
     if (valueA > valueB) return direction === "asc" ? 1 : -1;
     
     return 0;
   });
 
+  // Calcul pour connaitre le nombre de page
   const totalPages = Math.ceil(sortedTools.length / ITEMS_PER_PAGE);
+
+  // Calcul de l'index de départ pour la currentPage
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+
+  // Le slice sert à découper le tableau pour afficher nos 10 éléments par page
   const paginatedTools = sortedTools.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
+  // Fonction pour mettre le bon chevron suivant l'ordre choisi
   const renderSortIcon = (columnKey: keyof Tool) => {
     if (sortConfig?.key !== columnKey) return null;
     return sortConfig.direction === "asc" ? <ChevronUp size={14} /> : <ChevronDown size={14} />;
@@ -80,6 +95,7 @@ const RecentTools = () => {
               <tr>
                 <th className="w-[30%] px-6 pt-10 pb-6 font-medium border-b border-gray-100 dark:border-white/5 select-none">
                   <div 
+                    data-testid="sort-name"
                     className="flex items-center gap-2 cursor-pointer w-fit hover:text-gray-700 dark:hover:text-white transition-colors"
                     onClick={() => handleSort("name")}
                   >
@@ -91,6 +107,7 @@ const RecentTools = () => {
                 </th>
                 <th className="w-[15%] px-6 pt-10 pb-6 font-medium border-b border-gray-100 dark:border-white/5 select-none">
                   <div 
+                    data-testid="sort-department"
                     className="flex items-center gap-2 cursor-pointer w-fit hover:text-gray-700 dark:hover:text-white transition-colors"
                     onClick={() => handleSort("owner_department")}
                   >
@@ -102,6 +119,7 @@ const RecentTools = () => {
                 </th>
                 <th className="w-[15%] px-6 pt-10 pb-6 font-medium border-b border-gray-100 dark:border-white/5 select-none">
                   <div 
+                    data-testid="sort-users"
                     className="flex items-center gap-2 cursor-pointer w-fit hover:text-gray-700 dark:hover:text-white transition-colors"
                     onClick={() => handleSort("active_users_count")}
                   >
@@ -113,6 +131,7 @@ const RecentTools = () => {
                 </th>
                 <th className="w-[15%] px-6 pt-10 pb-6 font-medium border-b border-gray-100 dark:border-white/5 select-none">
                   <div 
+                    data-testid="sort-monthly_cost"
                     className="flex items-center gap-2 cursor-pointer w-fit hover:text-gray-700 dark:hover:text-white transition-colors"
                     onClick={() => handleSort("monthly_cost")}
                   >
@@ -182,6 +201,7 @@ const RecentTools = () => {
         {/* BARRE DE PAGINATION */}
         <div className="flex items-center justify-center gap-4 py-4 border-t border-gray-100 dark:border-white/5">
             <button
+                data-testid="prev-page"
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
                 className="p-1 rounded-md text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent transition-all"
@@ -194,6 +214,7 @@ const RecentTools = () => {
             </span>
 
             <button
+                data-testid="next-page"
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
                 className="p-1 rounded-md text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent transition-all"

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import darkWallpaper from './assets/darkWallpaper.webp'; 
 import Navbar from "./components/header";
 import Dashboard from "./pages/dashboard";
+import darkWallpaper from "./assets/darkWallpaper.webp";
 
 function App() {
   const [isDark, setIsDark] = useState(true);

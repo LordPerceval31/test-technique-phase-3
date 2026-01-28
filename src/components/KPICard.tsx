@@ -52,19 +52,15 @@ export default function KPICard({
         </div>
         
         <div className="mt-4">
-         {/* 3. LOGIQUE D'AFFICHAGE : Soit la barre, soit le badge, soit les deux */}
-         
-         {/* Le Badge de trend (+12%) est toujours là */}
          <div className="flex items-center gap-2 mb-2">
             <span className={`font-bold px-2 py-0.5 rounded-full whitespace-nowrap text-xs text-white ${gradients[color]}`}>
                 {trend}
             </span>
          </div>
-
-         {/* La Barre de progression (Uniquement si demandée) */}
          {progress !== undefined && (
             <div className="w-full bg-gray-100 dark:bg-white/5 rounded-full h-1.5 mt-3 overflow-hidden">
                 <div 
+                    data-testid="progress-bar"
                     className={`h-full rounded-full ${gradients[color]} transition-all duration-500`} 
                     style={{ width: `${progress}%` }}
                 ></div>
