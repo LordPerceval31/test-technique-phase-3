@@ -4,10 +4,7 @@ export interface User {
   id: number;
   name: string;
   email: string;
-  department_id: number;
-  role: string;
-  active: boolean;
-  joined_at: string;
+  department: string;
 }
 
 export interface Department {
@@ -18,12 +15,12 @@ export interface Department {
     updated_at: string,
 }
 
-export interface UserTools {
+export interface UserTool {
     user_id: number,
     tool_id: number,
-    usage_frequency: string,
+    usage_frequency: 'daily' | 'weekly' | 'monthly' | 'rarely';
     last_used: string,
-    proficiency_level: string,
+    proficiency_level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
 }
 
 

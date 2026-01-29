@@ -4,6 +4,7 @@ import Navbar from "./components/header";
 import Dashboard from "./pages/dashboard";
 import Tools from "./pages/tools";
 import darkWallpaper from "./assets/darkWallpaper.webp";
+import Analytics from './pages/analytics';
 
 function App() {
   // On récupère le thème sauvegardé ou on met Dark par défaut
@@ -41,6 +42,7 @@ function App() {
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard isDark={isDark} />} />
               <Route path="/tools" element={<Tools isDark={isDark} />} />
+              <Route path="/analytics" element={<Analytics isDark={isDark} />} />
             </Routes>
           </main>
         </div>
