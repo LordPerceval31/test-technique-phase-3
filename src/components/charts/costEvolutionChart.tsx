@@ -19,8 +19,8 @@ const CostEvolutionChart = ({ data, isDark }: CostEvolutionChartProps) => {
       <AreaChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 20 }}>
         <defs>
           <linearGradient id="costGradient" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#2563eb" stopOpacity={0.6}/>
-            <stop offset="100%" stopColor="#9333ea" stopOpacity={0.1}/>
+            <stop offset="0%" stopColor="#10b981" stopOpacity={0.6}/>
+            <stop offset="100%" stopColor="#86efac" stopOpacity={0.1}/>
           </linearGradient>
         </defs>
 
@@ -63,7 +63,7 @@ const CostEvolutionChart = ({ data, isDark }: CostEvolutionChartProps) => {
         <Area 
           type="monotone" 
           dataKey="total" 
-          stroke="#2563eb" 
+          stroke="#10b981" 
           strokeWidth={3}
           fillOpacity={1} 
           fill="url(#costGradient)" 

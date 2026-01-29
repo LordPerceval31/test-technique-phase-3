@@ -1,6 +1,6 @@
 import { memo } from "react";
 
-export type TimeRange = '30d' | '90d' | '1y';
+export type TimeRange = '30d' | '90d' | '12m';
 
 interface TimeRangeSelectorProps {
   value: TimeRange;
@@ -12,7 +12,7 @@ const TimeRangeSelector = memo(({ value, onChange, isDark }: TimeRangeSelectorPr
   const options: { label: string; value: TimeRange }[] = [
     { label: '30 Days', value: '30d' },
     { label: '90 Days', value: '90d' },
-    { label: '1 Year', value: '1y' },
+    { label: '1 Year', value: '12m' },
   ];
 
   return (

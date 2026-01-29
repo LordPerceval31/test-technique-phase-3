@@ -69,7 +69,7 @@ const TopToolsChart = ({ data, isDark }: TopToolsChartProps) => {
           {data.map((_, index) => (
             <Cell 
               key={`cell-${index}`} 
-              fill={index === 0 ? '#3b82f6' : '#6366f1'} 
+              fill={index === 0 ? '#86efac' : '#10b981'} 
               fillOpacity={1 - (index * 0.08)} 
             />
           ))}
