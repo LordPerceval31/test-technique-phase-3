@@ -15,11 +15,12 @@ interface DepartmentData {
 interface DepartmentBreakdownChartProps {
   data: DepartmentData[];
   isDark: boolean;
+  onDepartmentClick?: (deptName: string) => void;
 }
 
 const COLORS = ['#3b82f6', '#ec4899', '#10b981', '#f59e0b', '#8b5cf6', '#6366f1'];
 
-const DepartmentBreakdownChart = ({ data, isDark }: DepartmentBreakdownChartProps) => {
+const DepartmentBreakdownChart = ({ data, isDark, onDepartmentClick }: DepartmentBreakdownChartProps) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <PieChart>
@@ -34,6 +35,10 @@ const DepartmentBreakdownChart = ({ data, isDark }: DepartmentBreakdownChartProp
           nameKey="name"
           stroke="none"
           animationDuration={1200}
+          onClick={(data) => {
+            if (onDepartmentClick) onDepartmentClick(data.name);
+          }}
+          cursor="pointer"
         >
           {data.map((_, index) => (
             <Cell 

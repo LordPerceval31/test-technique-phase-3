@@ -14,11 +14,13 @@ function App() {
   });
 
   useEffect(() => {
-    // On applique la classe dark et on sauvegarde le choix dans le localstorage
+    // 1. On applique la classe dark
     if (isDark) {
       document.documentElement.classList.add('dark');
+      document.body.style.backgroundColor = '#000000'; 
     } else {
       document.documentElement.classList.remove('dark');
+      document.body.style.backgroundColor = '#ffffff';
     }
     localStorage.setItem('theme', JSON.stringify(isDark));
   }, [isDark]);
@@ -26,7 +28,12 @@ function App() {
   return (
     <BrowserRouter>
       <div className="relative min-h-screen">
-        <div className="fixed inset-0 bg-white z-0" />
+        <div 
+          className={`fixed inset-0 z-0 transition-colors duration-300 ${
+            isDark ? 'bg-black' : 'bg-white'
+          }`} 
+        />
+        
         <div 
           className={`fixed inset-0 bg-cover bg-center z-0 transition-opacity duration-300 ${
             isDark ? 'opacity-100' : 'opacity-0'
