@@ -1,5 +1,4 @@
-
-import { Users, ExternalLink, MoreVertical, Edit, Trash2, Power, Play, Calendar } from "lucide-react";
+import { Users, ExternalLink, MoreVertical, Edit, Trash2, Power, Play, Calendar, Check } from "lucide-react";
 import type { Tool } from "../utils/interfaces";
 import { getStatusStyles } from "../styles/statusColors";
 import { useEffect, useRef, useState } from "react";
@@ -11,12 +10,16 @@ interface ToolCardProps {
   onDelete: (id: number) => void;
   onToggleStatus: (tool: Tool) => void;
   onView: (tool: Tool) => void;
+  isSelected: boolean;
+  onSelect: (id: number) => void;
 }
 
-export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatus, onView }: ToolCardProps) {
+const ToolCard = ({ tool, isDark, onEdit, onDelete, onToggleStatus, onView, isSelected, onSelect }: ToolCardProps) => {
+  // gestion de l'état d'affichage du menu d'actions rapides
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  // fermeture automatique du menu lors d'un clic en dehors de l'élément
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -27,10 +30,12 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // définition dynamique des libellés et icônes selon l'état de l'outil
   const isInactive = tool.status === "unused";
   const toggleLabel = isInactive ? "Enable" : "Disable";
   const ToggleIcon = isInactive ? Play : Power;
 
+  // utilitaire de formatage de date localisé pour la france
   const formatDate = (dateString?: string) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString('fr-FR', { 
@@ -41,15 +46,34 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
   };
 
   return (
-    <div className="aspect-video w-full"> 
+    <div className="aspect-video w-full relative group/card-wrapper"> 
+      
+      {/* checkbox flottante apparaissant au survol pour la sélection multiple */}
       <div 
-        // 1. CLICK SUR LA CARTE = VIEW
+        onClick={(e) => {
+            e.stopPropagation();
+            onSelect(tool.id);
+        }}
+        className={`absolute top-4 left-4 z-20 w-5 h-5 rounded border cursor-pointer flex items-center justify-center transition-all duration-200
+            ${isSelected 
+                ? "bg-linear-to-br from-blue-600 to-purple-600 border-transparent opacity-100 shadow-md" 
+                : `bg-white dark:bg-[#121214] border-gray-300 dark:border-white/20 opacity-0 group-hover/card-wrapper:opacity-100 hover:border-blue-500`
+            }
+        `}
+      >
+        {isSelected && <Check size={12} className="text-white" strokeWidth={3} />}
+      </div>
+      <div 
         onClick={() => onView(tool)}
-        className={`relative h-full w-full flex flex-col justify-between rounded-xl border transition-all duration-300 shadow-sm hover:shadow-xl hover:-translate-y-1.5 cursor-pointer group/card 
+        className={`relative h-full w-full flex flex-col justify-between rounded-xl border transition-all duration-300 shadow-sm 
+        group-hover/card-wrapper:shadow-xl group-hover/card-wrapper:-translate-y-1.5 
+        cursor-pointer group/card 
+        
         ${isDark ? "bg-black border-white/10 hover:shadow-blue-500/10" : "bg-white border-gray-200 hover:shadow-gray-200/50"}
-        p-4 sm:p-5 md:p-6`}
+        p-4 sm:p-5 md:p-6 pl-12`}
       >
       
+        {/* en-tête : logo de l'outil et menu d'options */}
         <div className="flex justify-between items-start">
             <div className="p-2 rounded-lg bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5 shrink-0">
                 <img 
@@ -60,6 +84,7 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
                 />
             </div>
             
+            {/* menu contextuel localisé sur l'outil */}
             <div className="relative" ref={menuRef}>
                 <button 
                     onClick={(e) => {
@@ -72,7 +97,7 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
                 </button>
 
                 {showMenu && (
-                    <div className="absolute right-0 mt-1 w-36 bg-white dark:bg-[#121214] border border-gray-200 dark:border-white/10 rounded-lg shadow-lg z-20 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
+                    <div className="absolute right-0 mt-1 w-36 bg-white dark:bg-black border border-gray-200 dark:border-white/10 rounded-lg shadow-lg z-20 overflow-hidden animate-in fade-in zoom-in-95 duration-100">
                         <button onClick={(e) => {
                            e.stopPropagation()
                            onEdit(tool); setShowMenu(false); }} className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 cursor-pointer">
@@ -97,9 +122,8 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
             </div>
         </div>
 
-
+        {/* informations textuelles principales de l'outil */}
         <div className="flex flex-col flex-1 min-h-0 min-w-0 mt-3 sm:mt-4">
-
           <p className="font-medium text-gray-500 dark:text-gray-400 leading-tight truncate text-[10px] sm:text-xs">
             {tool.owner_department} • {tool.category}
           </p>
@@ -113,6 +137,7 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
           </p>
         </div>
 
+        {/* section inférieure : statuts, utilisateurs et informations tarifaires */}
         <div className="mt-auto flex flex-col gap-3 pt-3 border-t border-gray-100 dark:border-white/5">
             
           <div className="flex items-center justify-between">
@@ -152,3 +177,5 @@ export default function ToolCard({ tool, isDark, onEdit, onDelete, onToggleStatu
     </div>
   );
 }
+
+export default ToolCard;
