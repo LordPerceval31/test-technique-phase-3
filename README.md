@@ -1,59 +1,70 @@
-🚀 TechCorp Dashboard - Jour 6 (Foundation)
-Bienvenue dans le cockpit de gestion des outils internes de TechCorp. Cette application permet de monitorer les dépenses SaaS, l'utilisation des outils par département et l'optimisation des coûts.
+# 🚀 TechCorp Dashboard - Jour 6, 7 & 8 (Final Release)
 
-🏗️ Architecture du Projet
+Bienvenue dans le cockpit de gestion des outils internes de TechCorp. Cette application permet de monitorer les dépenses SaaS, l'utilisation des outils par département et l'optimisation des coûts à travers une interface unifiée.
+
+## 🏗️ Architecture du Projet
+
 L'application est construite avec une approche modulaire et typée :
 
-Vite + React + TS : Pour un environnement de développement ultra-rapide et sécurisé.
+- **Vite + React + TS** : Pour un environnement de développement ultra-rapide et sécurisé.
+- **Tailwind CSS v4** : Utilisation des nouvelles capacités de styling pour un design "Pixel Perfect".
+- **Recharts** : Librairie de visualisation de données pour les graphiques analytiques (Jour 8).
+- **Vitest & React Testing Library** : Suite de tests unitaires garantissant la robustesse des composants critiques.
 
-Tailwind CSS v4 : Utilisation des nouvelles capacités de styling pour un design "Pixel Perfect".
+## 🎨 Design System & UX
 
-Vitest & React Testing Library : Suite de tests unitaires garantissant la robustesse des composants critiques.
+J'ai maintenu une cohérence visuelle stricte sur les 3 jours :
 
-🎨 Design System Evolution
-Pendant ce Jour 6, nous avons établi les bases visuelles :
+- **Mode Sombre/Clair Fluide** : Système de thémisation complet.
+- **Navigation Contextuelle (Drill-down)** : Interaction fluide entre les graphiques analytiques et le catalogue d'outils.
+- **Deep Linking** : Synchronisation des états de filtrage avec l'URL pour un partage facile.
 
-Mode Sombre/Clair : Un système de thémisation complet utilisant les classes dark de Tailwind et le localStorage.
+## 📅 Journal des Livrables
 
-Composants KPI : Des cartes dynamiques avec des dégradés subtils et des barres de progression calculées selon l'utilisation du budget.
+### ✅ Jour 6 : Dashboard Foundation (Terminé)
+- **Navigation** : Header responsive et sidebar virtuelle.
+- **KPIs** : Cartes dynamiques avec barres de progression.
+- **Tableau** : Liste des outils récents avec tri et pagination.
+- **Tests** : Couverture unitaire des composants de base (`KPICard`, `RecentTools`, `Header`).
 
-Tableau de Données : Une interface interactive gérant le tri par colonnes et la pagination.
+### ✅ Jour 7 : Tools Catalog (Autonomous Consistency)
+- **Catalogue Complet** : Vue en grille (Grid) ou liste avec pagination.
+- **CRUD Complet** : Ajout, Modification et Suppression d'outils via Modales.
+- **Filtres Avancés** : Moteur de recherche multi-critères (Nom, Département, Statut, Prix min/max).
+- **Bulk Operations** : Sélection multiple pour suppression ou changement de statut en masse.
+- **Gestion d'État** : Initialisation "Lazy" des filtres basée sur l'URL.
+- **Tests** : Couverture unitaire des composants de base (`toolsCard`, `ToolsFilter`).
 
-🔗 Navigation & User Journey
-Dashboard (/) : Vue d'ensemble des KPIs et des derniers outils ajoutés.
+### ✅ Jour 8 : Analytics & Data Viz (Advanced Integration)
+- **Visualisation** : Intégration de graphiques complexes (`AreaChart`, `PieChart`, `BarChart`).
+- **Time Machine** : Filtrage temporel réel (30j, 90j, 12 mois) recalculant tous les KPIs et graphiques.
+- **Interactivité** :
+  - **Drill-down** : Cliquer sur un département dans le graphique redirige vers la page Tools filtrée.
+  - **Export Data** : Génération de rapports CSV dynamiques basés sur la vue actuelle.
+- **Logique Métier** : Calcul précis du coût par employé (Headcount vs Licences) et taux d'adoption.
 
-Pagination : Navigation fluide à travers les listes d'outils (limite de 10 par page).
+## 🚧 Limitations Connues (Non implémenté par manque de temps)
+En raison des contraintes temporelles strictes de l'exercice (3 jours), les fonctionnalités suivantes n'ont pas pu être finalisées dans cette version :
 
-Toggle Theme : Passage instantané d'une ambiance de travail sombre à claire via le Header.
+- **Insights Dashboard (Business Intelligence)** : La section d'alertes automatiques (ex: "3 outils inutilisés détectés") et les calculs de ROI n'ont pas été implémentés.
+- **Predictive Insights** : Les projections de coûts futurs (Forecasting) sont absentes.
+- **Usage Trends** : Les graphiques spécifiques de "Growth Trends" (timeline des nouveaux outils) manquent à l'appel.
+- **Tests E2E** : La couverture de tests n'a pas été étendue aux fonctionnalités complexes des Jours 7 et 8 (Forms, Charts interactions).
 
-🧪 Stratégie de Test
-Nous avons implémenté des tests unitaires pour chaque brique majeure :
+## 🚀 Quick Start
 
-KPICard.test.tsx : Validation du rendu des metrics et de la logique conditionnelle de la barre de progression.
+### Pré-requis
+Ce projet nécessite une API Backend pour fonctionner (voir `Internal Tools API`).
 
-RecentTools.test.tsx : Test des fonctionnalités de tri (logiciel) et de la pagination via data-testid.
-
-Header.test.tsx : Vérification du bon fonctionnement du bouton de changement de thème.
-
-🚀 Quick Start
-Installation :
-
-Bash
-
+### Installation
 npm install
-Lancer le développement :
 
-Bash
 
+### Configuration
+Assurez-vous que l'API tourne sur le port configuré dans src/utils/api.ts.
+
+### Lancer le développement
 npm run dev
-Lancer la suite de tests :
 
-Bash
-
+### Lancer la suite de tests
 npm test
-📊 État d'avancement
-[x] Jour 6 : Dashboard Foundation (Terminé)
-
-[ ] Jour 7 : Tools Catalog & Filtres Avancés (À venir)
-
-[ ] Jour 8 : Analytics & Data Viz (À venir)
